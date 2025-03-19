@@ -7,10 +7,14 @@ class BottomBarModel {
   BottomBarModel(this.icon, this.title);
 
   static List<BottomBarModel> bottomBar() {
-    return [
-      BottomBarModel(Icon(Icons.home), "Home"),
-      BottomBarModel(Icon(Icons.home), "Search"),
-      BottomBarModel(Icon(Icons.home), "Playlist"),
+    List<Map<String, dynamic>> datas = [
+      {"icon": Icons.home, "title": "Home"},
+      {"icon": Icons.search, "title": "Search"},
+      {"icon": Icons.playlist_add, "title": "Playlist"},
     ];
+
+    return datas
+        .map((data) => BottomBarModel(Icon(data["icon"]), data["title"]))
+        .toList();
   }
 }

@@ -14,13 +14,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   List<Widget> pages = [SongHomePage(), SearchPage(), PlaylistPage()];
-
   List<BottomBarModel> bottomBarItem = BottomBarModel.bottomBar();
   int currentIndex = 0;
-
   PageController pageController = PageController();
 
-  void pageIndex() {}
+  void pageIndex(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+    pageController.animateToPage(
+      currentIndex,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +42,16 @@ class _HomePageState extends State<HomePage>
                   controller: pageController,
                   children: pages,
                   onPageChanged: (index) {
-                    currentIndex = index;
+                    setState(() {
+                      currentIndex = index;
+                    });
                   },
                 ),
               ),
             ],
           ),
 
-          ///BOTTOM BAR
+          /// BOTTOM BAR
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -54,7 +63,7 @@ class _HomePageState extends State<HomePage>
                 children: List.generate(
                   bottomBarItem.length,
                   (i) => GestureDetector(
-                    onTap: () {},
+                    onTap: () => pageIndex(i),
                     child: Text(bottomBarItem[i].title),
                   ),
                 ),

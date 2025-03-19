@@ -1,4 +1,4 @@
-import 'package:deep_m/src/features/model/UI/bottomBar_model.dart';
+import 'package:deep_m/src/features/model/UI/bottombar_model.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
 import 'package:deep_m/src/features/views/pages/song_home_page.dart';

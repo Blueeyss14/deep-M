@@ -1,8 +1,17 @@
+import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
 import 'package:deep_m/src/features/views/home/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => BottombarViemodel()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

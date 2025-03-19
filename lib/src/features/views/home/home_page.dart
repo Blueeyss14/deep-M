@@ -60,7 +60,16 @@ class _HomePageState extends State<HomePage>
             children: [
               Container(
                 width: double.infinity,
-                color: Colors.green,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withAlpha(10),
+                      Colors.black.withAlpha(1000),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: List.generate(
@@ -69,13 +78,16 @@ class _HomePageState extends State<HomePage>
                       child: GestureDetector(
                         onTap: () => pageIndex(i),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           color: Colors.transparent,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(bottomBarItem[i].icon.icon, size: 25),
-                              Text(bottomBarItem[i].title),
+                              Text(
+                                bottomBarItem[i].title,
+                                style: TextStyle(fontSize: 13),
+                              ),
                             ],
                           ),
                         ),

@@ -1,5 +1,6 @@
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
+import 'package:deep_m/src/features/views/pages/song_home_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,12 +11,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Widget> pages = [HomePage(), SearchPage(), PlaylistPage()];
+  List<Widget> pages = [SongHomePage(), SearchPage(), PlaylistPage()];
+
+  int pageIndex = 0;
+
+  PageController pageController = PageController();
 
   @override
   void initState() {
     super.initState();
-    pages[0];
   }
 
   @override
@@ -23,7 +27,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         children: [
-          Column(children: [PageView(children: pages)]),
+          Column(
+            children: [
+              Expanded(
+                child: PageView(
+                  controller: pageController,
+                  children: pages,
+                  onPageChanged: (index) {
+                    pageIndex = index;
+                  },
+                ),
+              ),
+            ],
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(

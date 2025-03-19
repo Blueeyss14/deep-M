@@ -39,6 +39,7 @@ dependencies:
   youtube_explode_dart: ^2.3.10
   cached_network_image: ^3.4.1
   path_provider: ^2.1.5
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

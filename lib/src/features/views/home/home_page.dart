@@ -55,23 +55,36 @@ class _HomePageState extends State<HomePage>
           ),
 
           /// BOTTOM BAR
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 30,
-              width: double.infinity,
-              color: Colors.green,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(
-                  bottomBarItem.length,
-                  (i) => GestureDetector(
-                    onTap: () => pageIndex(i),
-                    child: Text(bottomBarItem[i].title),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                width: double.infinity,
+                color: Colors.green,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(
+                    bottomBarItem.length,
+                    (i) => Expanded(
+                      child: GestureDetector(
+                        onTap: () => pageIndex(i),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          color: Colors.transparent,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(bottomBarItem[i].icon.icon, size: 25),
+                              Text(bottomBarItem[i].title),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),

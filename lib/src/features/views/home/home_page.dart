@@ -13,6 +13,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   List<Widget> pages = [SongHomePage(), SearchPage(), PlaylistPage()];
   List<BottomBarModel> bottomBarItem = BottomBarModel.bottomBar();
   int currentIndex = 0;
@@ -74,7 +77,4 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

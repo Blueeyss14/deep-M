@@ -1,8 +1,10 @@
 import 'package:deep_m/src/features/model/UI/bottombar_model.dart';
+import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
 import 'package:deep_m/src/features/views/pages/song_home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,23 +19,10 @@ class _HomePageState extends State<HomePage>
   bool get wantKeepAlive => true;
 
   List<Widget> pages = [SongHomePage(), SearchPage(), PlaylistPage()];
-  List<BottomBarModel> bottomBarItem = BottomBarModel.bottomBar();
-  int currentIndex = 0;
-  PageController pageController = PageController();
-
-  void pageIndex(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-    pageController.animateToPage(
-      currentIndex,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
+    final bottomNavItem = Provider.of<BottombarViemodel>(context);
     super.build(context);
     return Scaffold(
       body: Stack(
@@ -42,11 +31,11 @@ class _HomePageState extends State<HomePage>
             children: [
               Expanded(
                 child: PageView(
-                  controller: pageController,
+                  controller: bottomNavItem.pageController,
                   children: pages,
                   onPageChanged: (index) {
                     setState(() {
-                      currentIndex = index;
+                      bottomNavItem.currentIndex = index;
                     });
                   },
                 ),
@@ -73,19 +62,22 @@ class _HomePageState extends State<HomePage>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: List.generate(
-                    bottomBarItem.length,
+                    bottomNavItem.bottomBarItem.length,
                     (i) => Expanded(
                       child: GestureDetector(
-                        onTap: () => pageIndex(i),
+                        onTap: () => bottomNavItem.pageIndex(i),
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           color: Colors.transparent,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(bottomBarItem[i].icon.icon, size: 25),
+                              Icon(
+                                bottomNavItem.bottomBarItem[i].icon.icon,
+                                size: 25,
+                              ),
                               Text(
-                                bottomBarItem[i].title,
+                                bottomNavItem.bottomBarItem[i].title,
                                 style: TextStyle(fontSize: 13),
                               ),
                             ],

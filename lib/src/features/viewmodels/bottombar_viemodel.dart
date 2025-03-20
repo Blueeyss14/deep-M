@@ -1,4 +1,4 @@
-import 'package:deep_m/src/features/model/UI/bottom_bar_model.dart';
+import 'package:deep_m/src/features/model/UI/bottombar_model.dart';
 import 'package:flutter/material.dart';
 
 class BottombarViemodel extends ChangeNotifier {

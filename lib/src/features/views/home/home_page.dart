@@ -24,18 +24,19 @@ class _HomePageState extends State<HomePage>
     final bottomNavItem = Provider.of<BottombarViemodel>(context);
     super.build(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         title: Text("App Name"),
         // leading: Icon(Icons.menu),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Icon(Icons.search),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 15),
+        //     child: Icon(Icons.search),
+        //   ),
+        // ],
       ),
       body: Stack(
         children: [

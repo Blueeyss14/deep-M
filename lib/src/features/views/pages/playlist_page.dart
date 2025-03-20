@@ -5,6 +5,9 @@ class PlaylistPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("Ini adalah Playlist Page")));
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Center(child: Text("Ini adalah Playlist Page")),
+    );
   }
 }

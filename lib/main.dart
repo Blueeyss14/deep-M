@@ -19,6 +19,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false);
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:deep_m/src/features/views/components/textfield_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatelessWidget {
@@ -17,24 +18,7 @@ class SearchPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           color: Colors.transparent,
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                cursorColor: Colors.black,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  hintText: "Search song here...",
-                  isDense: true,
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(8),
-                ),
-              ),
-            ),
-            Icon(Icons.search, size: 20),
-            const SizedBox(width: 10),
-          ],
-        ),
+        child: TextfieldSearch(),
       ),
     );
   }

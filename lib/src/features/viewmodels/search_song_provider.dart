@@ -7,7 +7,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 
 class SearchSong extends ChangeNotifier {
-  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
   final AudioPlayer _audioPlayer = AudioPlayer();
   final YoutubeExplode _youtube = YoutubeExplode();
 
@@ -18,7 +18,7 @@ class SearchSong extends ChangeNotifier {
 
   String get _apiKey => dotenv.env['YOUTUBE_API_KEY'] ?? '';
 
-  Future<void> _searchVideos(String query) async {
+  Future<void> searchVideos(String query) async {
     if (query.trim().isEmpty) return;
 
     isLoading = true;

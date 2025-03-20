@@ -28,6 +28,14 @@ class _HomePageState extends State<HomePage>
         elevation: 0,
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
+        title: Text("App Name"),
+        // leading: Icon(Icons.menu),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Icon(Icons.search),
+          ),
+        ],
       ),
       body: Stack(
         children: [

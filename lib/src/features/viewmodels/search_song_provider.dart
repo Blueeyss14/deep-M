@@ -6,7 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 
-class SearchSong extends ChangeNotifier {
+class SearchSongProvider extends ChangeNotifier {
   final TextEditingController searchController = TextEditingController();
   final AudioPlayer _audioPlayer = AudioPlayer();
   final YoutubeExplode _youtube = YoutubeExplode();

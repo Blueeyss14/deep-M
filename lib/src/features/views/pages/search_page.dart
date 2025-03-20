@@ -8,17 +8,9 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height / 10,
-        ),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.black),
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.transparent,
-        ),
-        child: TextfieldSearch(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [TextfieldSearch(), Text("data")],
       ),
     );
   }

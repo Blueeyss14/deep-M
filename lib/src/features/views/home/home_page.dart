@@ -1,4 +1,3 @@
-import 'package:deep_m/src/features/model/UI/bottombar_model.dart';
 import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
@@ -25,6 +24,11 @@ class _HomePageState extends State<HomePage>
     final bottomNavItem = Provider.of<BottombarViemodel>(context);
     super.build(context);
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+      ),
       body: Stack(
         children: [
           Column(

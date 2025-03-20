@@ -2,9 +2,12 @@ import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
 import 'package:deep_m/src/features/viewmodels/search_song_provider.dart';
 import 'package:deep_m/src/features/views/home/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(
     MultiProvider(
       providers: [

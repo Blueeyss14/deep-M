@@ -14,7 +14,6 @@ class _TextfieldSearchState extends State<TextfieldSearch> {
   Widget build(BuildContext context) {
     final searchProvider = Provider.of<SearchSongProvider>(context);
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height / 10,
       ),

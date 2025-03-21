@@ -11,8 +11,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => BottombarViemodel()),
-        ChangeNotifierProvider(create: (context) => SearchSongProvider()),
+        ChangeNotifierProvider(create: (_) => BottombarViemodel()),
+        ChangeNotifierProvider(create: (_) => SearchSongProvider()),
       ],
       child: const MyApp(),
     ),

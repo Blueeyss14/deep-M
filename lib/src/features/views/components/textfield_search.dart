@@ -26,6 +26,7 @@ class _TextfieldSearchState extends State<TextfieldSearch> {
         children: [
           Expanded(
             child: TextField(
+              controller: searchProvider.searchController,
               cursorColor: Colors.black,
               autocorrect: false,
               decoration: InputDecoration(
@@ -38,11 +39,7 @@ class _TextfieldSearchState extends State<TextfieldSearch> {
           ),
           GestureDetector(
             onTap: () {
-              setState(() {
-                searchProvider.searchVideos(
-                  searchProvider.searchController.text,
-                );
-              });
+              searchProvider.searchVideos(searchProvider.searchController.text);
             },
             child: Icon(Icons.search, size: 20),
           ),

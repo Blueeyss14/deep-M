@@ -2,14 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 
 class SearchSongProvider extends ChangeNotifier {
   final TextEditingController searchController = TextEditingController();
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  final YoutubeExplode _youtube = YoutubeExplode();
 
   bool isPlaying = false;
   bool isLoading = false;
@@ -23,6 +19,7 @@ class SearchSongProvider extends ChangeNotifier {
 
     isLoading = true;
     searchResult = [];
+    notifyListeners();
 
     try {
       final response = await http.get(
@@ -77,8 +74,7 @@ class SearchSongProvider extends ChangeNotifier {
       }
     } finally {
       isLoading = false;
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 }

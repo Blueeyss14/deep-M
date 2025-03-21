@@ -33,7 +33,17 @@ class MusicProvider extends ChangeNotifier {
   //Initialization of Bufering Audio
   BufferingAudio? bufferingAudio;
 
-  MusicProvider(BuildContext context) {}
+  MusicProvider(BuildContext context) {
+    // Mendengarkan perubahan status pemutaran
+    audioPlayer.playerStateStream.listen((state) {
+      isPlaying = state.playing;
+      // Jika status sudah playing dan sedang buffer, ubah isBuffering menjadi false
+      if (state.playing && isBuffering) {
+        isBuffering = false;
+        notifyListeners();
+      }
+    });
+  }
 
   void initBufferingAudio(BuildContext context) {
     bufferingAudio ??= Provider.of<BufferingAudio>(context, listen: false);
@@ -96,6 +106,7 @@ class MusicProvider extends ChangeNotifier {
       await audioPlayer.play();
 
       isPlaying = true;
+      isBuffering = false;
       notifyListeners();
 
       await audioPlayer.setLoopMode(LoopMode.off);
@@ -109,6 +120,12 @@ class MusicProvider extends ChangeNotifier {
           }
         }
       });
-    } catch (e) {}
+    } catch (e) {
+      isBuffering = false;
+      notifyListeners();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memutar audio: ${e.toString()}')),
+      );
+    }
   }
 }

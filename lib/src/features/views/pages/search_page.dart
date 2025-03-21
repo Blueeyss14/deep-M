@@ -10,6 +10,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchProvider = Provider.of<SearchSongProvider>(context);
+    final audioPlayer = Provider.of<MusicProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -20,6 +21,70 @@ class SearchPage extends StatelessWidget {
           children: [
             TextfieldSearch(),
             const SizedBox(height: 10),
+            StreamBuilder(
+              stream: audioPlayer.audioPlayer.positionStream,
+              builder: (context, positionSnapshot) {
+                final position = positionSnapshot.data ?? Duration.zero;
+
+                return StreamBuilder(
+                  stream: audioPlayer.audioPlayer.durationStream,
+                  builder: (context, durationSnapshot) {
+                    final duration = durationSnapshot.data ?? Duration.zero;
+
+                    if (audioPlayer.isBuffering) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Column(
+                        children: [
+                          SliderTheme(
+                            data: SliderTheme.of(context).copyWith(
+                              thumbShape: const RoundSliderThumbShape(
+                                enabledThumbRadius: 5,
+                              ),
+                              overlayShape: const RoundSliderOverlayShape(
+                                overlayRadius: 14,
+                              ),
+                              thumbColor: Colors.red,
+                              activeTrackColor: Colors.red,
+                              inactiveTrackColor: Colors.grey[300],
+                            ),
+                            child: Slider(
+                              min: 0,
+                              max:
+                                  duration.inSeconds.toDouble() > 0
+                                      ? duration.inSeconds.toDouble()
+                                      : 0.1,
+                              value: position.inSeconds.toDouble().clamp(
+                                0,
+                                duration.inSeconds.toDouble() > 0
+                                    ? duration.inSeconds.toDouble()
+                                    : 0.1,
+                              ),
+                              onChanged: (value) async {
+                                final newPosition = Duration(
+                                  seconds: value.toInt(),
+                                );
+                                await audioPlayer.audioPlayer.seek(newPosition);
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(_formatDuration(position)),
+                                Text(_formatDuration(duration)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                );
+              },
+            ),
 
             Expanded(
               child:
@@ -34,9 +99,11 @@ class SearchPage extends StatelessWidget {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                result['title'] ?? 'Tidak Ada',
-                                overflow: TextOverflow.ellipsis,
+                              Expanded(
+                                child: Text(
+                                  result['title'] ?? 'Tidak Ada',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               IconButton(
                                 onPressed: () {
@@ -64,5 +131,11 @@ class SearchPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
   }
 }

@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 class SearchSongProvider extends ChangeNotifier {
   final TextEditingController searchController = TextEditingController();
 
-  bool isPlaying = false;
   bool isLoading = false;
 
   List<Map<String, String>> searchResult = [];
@@ -63,14 +62,13 @@ class SearchSongProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      String errorMessage = 'Gagal mencari video';
+      // ignore: unused_local_variable
+      String errorMessage = 'Failed to Search video';
       if (e.toString().contains('Socket') ||
           e.toString().contains('Connection')) {
         errorMessage = 'No Internet';
       } else if (e.toString().contains('Limit API Habis')) {
-        errorMessage = 'Limit API Habis';
-      } else if (e.toString().contains('API Key Salah')) {
-        errorMessage = 'API Key Salah';
+        errorMessage = 'API Limited';
       }
     } finally {
       isLoading = false;

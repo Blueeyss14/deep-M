@@ -141,4 +141,10 @@ class MusicProvider extends ChangeNotifier {
       audioPlayer.stop();
     }
   }
+
+  void pauseAudio() async {
+    await audioPlayer.pause();
+    isPlaying = false;
+    notifyListeners();
+  }
 }

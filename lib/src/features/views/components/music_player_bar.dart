@@ -1,4 +1,5 @@
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
+import 'package:deep_m/src/features/viewmodels/search_song_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +40,29 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
               } else {
                 return Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(Icons.skip_previous),
+
+                        if (audioPlayer.isPlaying)
+                          GestureDetector(
+                            onTap: () {
+                              audioPlayer.pauseAudio();
+                            },
+                            child: Icon(Icons.pause),
+                          )
+                        else
+                          GestureDetector(
+                            onTap: () {
+                              audioPlayer.audioPlayer.play();
+                            },
+                            child: Icon(Icons.play_arrow),
+                          ),
+
+                        Icon(Icons.skip_next),
+                      ],
+                    ),
                     SliderTheme(
                       data: SliderTheme.of(context).copyWith(
                         thumbShape: const RoundSliderThumbShape(

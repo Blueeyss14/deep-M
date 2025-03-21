@@ -12,7 +12,7 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
-    final bottomBar = Provider.of<BottombarViemodel>(context, listen: false);
+    final bottomNavItem = Provider.of<BottombarViemodel>(context);
 
     return Container(
       width: double.infinity,
@@ -26,19 +26,19 @@ class _BottomBarState extends State<BottomBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(
-          bottomBar.bottomBarItem.length,
+          bottomNavItem.bottomBarItem.length,
           (i) => Expanded(
             child: GestureDetector(
-              onTap: () => bottomBar.pageIndex(i),
+              onTap: () => bottomNavItem.pageIndex(i),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 color: Colors.transparent,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(bottomBar.bottomBarItem[i].icon.icon, size: 25),
+                    Icon(bottomNavItem.bottomBarItem[i].icon.icon, size: 25),
                     Text(
-                      bottomBar.bottomBarItem[i].title,
+                      bottomNavItem.bottomBarItem[i].title,
                       style: TextStyle(fontSize: 13),
                     ),
                   ],

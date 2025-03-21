@@ -1,5 +1,4 @@
 import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
-import 'package:deep_m/src/features/viewmodels/buffering_audio_provider.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/viewmodels/search_song_provider.dart';
 import 'package:deep_m/src/features/views/home/home_page.dart';
@@ -15,7 +14,6 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => BottombarViemodel()),
         ChangeNotifierProvider(create: (_) => SearchSongProvider()),
-        ChangeNotifierProvider(create: (context) => BufferingAudio(context)),
         ChangeNotifierProvider(create: (context) => MusicProvider(context)),
       ],
       child: const MyApp(),

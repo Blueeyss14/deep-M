@@ -1,4 +1,5 @@
 import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
+import 'package:deep_m/src/features/views/components/music_player_bar.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
 import 'package:deep_m/src/features/views/pages/song_home_page.dart';
@@ -100,6 +101,17 @@ class _HomePageState extends State<HomePage>
                     ),
                   ),
                 ),
+              ),
+            ],
+          ),
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              MusicPlayerBar(),
+              SizedBox(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 10 - 20,
               ),
             ],
           ),

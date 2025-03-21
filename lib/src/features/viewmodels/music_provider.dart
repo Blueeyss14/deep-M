@@ -123,9 +123,22 @@ class MusicProvider extends ChangeNotifier {
     } catch (e) {
       isBuffering = false;
       notifyListeners();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal memutar audio: ${e.toString()}')),
-      );
+
+      // Gunakan Future.microtask untuk menghindari blocking UI thread
+      Future.microtask(() {
+        try {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Gagal memutar audio: ${e.toString()}')),
+            );
+          }
+        } catch (uiError) {
+          debugPrint('Error: $uiError');
+        }
+      });
+
+      // Pastikan resource dibersihkan dengan benar
+      audioPlayer.stop();
     }
   }
 }

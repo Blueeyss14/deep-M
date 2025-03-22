@@ -17,6 +17,37 @@ void musicBottomSheet(BuildContext context) {
               audioPlayer.currentTitle,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            StreamBuilder(
+              stream: audioPlayer.audioPlayer.positionStream,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<Duration> snapshot,
+              ) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(Icons.skip_previous),
+
+                    if (audioPlayer.isPlaying)
+                      GestureDetector(
+                        onTap: () {
+                          audioPlayer.pauseAudio();
+                        },
+                        child: Icon(Icons.pause),
+                      )
+                    else
+                      GestureDetector(
+                        onTap: () {
+                          audioPlayer.audioPlayer.play();
+                        },
+                        child: Icon(Icons.play_arrow),
+                      ),
+
+                    Icon(Icons.skip_next),
+                  ],
+                );
+              },
+            ),
             MusicSlider(),
             CurrentSongText(),
           ],

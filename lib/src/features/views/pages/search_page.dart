@@ -69,6 +69,7 @@ class SearchPage extends StatelessWidget {
                                       context,
                                       result['videoId'] ?? '',
                                       result['title'] ?? 'Tidak Ada',
+                                      result['thumbnail'] ?? '',
                                     );
                                   },
                                   icon: Icon(Icons.play_arrow),

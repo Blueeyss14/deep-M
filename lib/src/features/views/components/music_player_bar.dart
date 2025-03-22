@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/views/utils/music_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(5),
           color: Colors.grey[400],
         ),
         clipBehavior: Clip.antiAlias,
@@ -60,33 +61,46 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                               minHeight: 2,
                             ),
                           ),
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.skip_previous),
-
-                                  if (audioPlayer.isPlaying)
-                                    GestureDetector(
-                                      onTap: () {
-                                        audioPlayer.pauseAudio();
-                                      },
-                                      child: Icon(Icons.pause),
-                                    )
-                                  else
-                                    GestureDetector(
-                                      onTap: () {
-                                        audioPlayer.audioPlayer.play();
-                                      },
-                                      child: Icon(Icons.play_arrow),
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (audioPlayer.currentThumbnail.isEmpty)
+                                  const Icon(Icons.music_note)
+                                else
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(3),
+                                    child: CachedNetworkImage(
+                                      imageUrl: audioPlayer.currentThumbnail,
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
                                     ),
-
-                                  Icon(Icons.skip_next),
-                                ],
-                              ),
-                            ],
+                                  ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    audioPlayer.currentTitle,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                                if (audioPlayer.isPlaying)
+                                  GestureDetector(
+                                    onTap: () {
+                                      audioPlayer.pauseAudio();
+                                    },
+                                    child: Icon(Icons.pause),
+                                  )
+                                else
+                                  GestureDetector(
+                                    onTap: () {
+                                      audioPlayer.audioPlayer.play();
+                                    },
+                                    child: Icon(Icons.play_arrow),
+                                  ),
+                              ],
+                            ),
                           ),
                         ],
                       );

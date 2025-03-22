@@ -1,5 +1,4 @@
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
-import 'package:deep_m/src/features/viewmodels/search_song_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +21,8 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
     final audioPlayer = Provider.of<MusicProvider>(context);
 
     return Container(
-      // margin: const EdgeInsets.symmetric(vertical: 50),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.all(10),
       color: Colors.grey[400],
       width: double.infinity,
       child: StreamBuilder(
@@ -40,6 +40,10 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
               } else {
                 return Column(
                   children: [
+                    Text(
+                      audioPlayer.currentTitle,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

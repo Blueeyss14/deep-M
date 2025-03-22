@@ -11,12 +11,6 @@ class MusicPlayerBar extends StatefulWidget {
 }
 
 class _MusicPlayerBarState extends State<MusicPlayerBar> {
-  String _formatDuration(Duration duration) {
-    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$minutes:$seconds';
-  }
-
   @override
   Widget build(BuildContext context) {
     final audioPlayer = Provider.of<MusicProvider>(context);
@@ -68,80 +62,29 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                           ),
                           Column(
                             children: [
-                              // Text(
-                              //   audioPlayer.currentTitle,
-                              //   style: TextStyle(fontWeight: FontWeight.bold),
-                              // ),
-                              // Row(
-                              //   mainAxisAlignment:
-                              //       MainAxisAlignment.spaceEvenly,
-                              //   children: [
-                              //     Icon(Icons.skip_previous),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Icon(Icons.skip_previous),
 
-                              //     if (audioPlayer.isPlaying)
-                              //       GestureDetector(
-                              //         onTap: () {
-                              //           audioPlayer.pauseAudio();
-                              //         },
-                              //         child: Icon(Icons.pause),
-                              //       )
-                              //     else
-                              //       GestureDetector(
-                              //         onTap: () {
-                              //           audioPlayer.audioPlayer.play();
-                              //         },
-                              //         child: Icon(Icons.play_arrow),
-                              //       ),
+                                  if (audioPlayer.isPlaying)
+                                    GestureDetector(
+                                      onTap: () {
+                                        audioPlayer.pauseAudio();
+                                      },
+                                      child: Icon(Icons.pause),
+                                    )
+                                  else
+                                    GestureDetector(
+                                      onTap: () {
+                                        audioPlayer.audioPlayer.play();
+                                      },
+                                      child: Icon(Icons.play_arrow),
+                                    ),
 
-                              //     Icon(Icons.skip_next),
-                              //   ],
-                              // ),
-                              SliderTheme(
-                                data: SliderTheme.of(context).copyWith(
-                                  thumbShape: const RoundSliderThumbShape(
-                                    enabledThumbRadius: 5,
-                                  ),
-                                  overlayShape: const RoundSliderOverlayShape(
-                                    overlayRadius: 14,
-                                  ),
-                                  thumbColor: Colors.red,
-                                  activeTrackColor: Colors.red,
-                                  inactiveTrackColor: Colors.grey[300],
-                                ),
-                                child: Slider(
-                                  min: 0,
-                                  max:
-                                      duration.inSeconds.toDouble() > 0
-                                          ? duration.inSeconds.toDouble()
-                                          : 0.1,
-                                  value: position.inSeconds.toDouble().clamp(
-                                    0,
-                                    duration.inSeconds.toDouble() > 0
-                                        ? duration.inSeconds.toDouble()
-                                        : 0.1,
-                                  ),
-                                  onChanged: (value) async {
-                                    final newPosition = Duration(
-                                      seconds: value.toInt(),
-                                    );
-                                    await audioPlayer.audioPlayer.seek(
-                                      newPosition,
-                                    );
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(_formatDuration(position)),
-                                    Text(_formatDuration(duration)),
-                                  ],
-                                ),
+                                  Icon(Icons.skip_next),
+                                ],
                               ),
                             ],
                           ),

@@ -44,8 +44,6 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                       children: [
                         Container(
                           alignment: Alignment.topLeft,
-                          // height: 20,
-                          color: Colors.amber,
                           child: LinearProgressIndicator(
                             value:
                                 duration.inSeconds > 0

@@ -51,11 +51,12 @@ class SearchSongProvider extends ChangeNotifier {
                           (item['snippet']['title'] ?? 'No Title').toString(),
                       'videoId': (item['id']['videoId'] ?? '').toString(),
                       'thumbnail':
-                          (item['snippet']['thumbnails']['default']['url'] ??
-                                  '')
+                          (item['snippet']['thumbnails']['high']['url'] ?? '')
                               .toString(),
                       'channel':
                           (item['snippet']['channelTitle'] ?? '').toString(),
+                      'description':
+                          (item['snippet']['description'] ?? '').toString(),
                     };
                   })
                   .toList();

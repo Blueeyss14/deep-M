@@ -12,6 +12,7 @@ class MusicProvider extends ChangeNotifier {
   String currentTitle = '';
   String currentThumbnail = '';
   String currentChannel = '';
+  String currentDescription = '';
   bool isBuffering = false;
   bool isPlaying = false;
 
@@ -57,6 +58,7 @@ class MusicProvider extends ChangeNotifier {
     String title,
     String thumbnail,
     String channel,
+    String description,
   ) async {
     if (videoId.isEmpty) {
       ScaffoldMessenger.of(
@@ -71,6 +73,7 @@ class MusicProvider extends ChangeNotifier {
     currentTitle = title;
     currentThumbnail = thumbnail;
     currentChannel = channel;
+    currentDescription = description;
     notifyListeners();
 
     try {

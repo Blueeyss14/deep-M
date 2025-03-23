@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/shared/current_song_text.dart';
 import 'package:deep_m/src/shared/music_slider.dart';
@@ -8,50 +9,78 @@ void musicBottomSheet(BuildContext context) {
   final audioPlayer = Provider.of<MusicProvider>(context, listen: false);
 
   showModalBottomSheet(
+    clipBehavior: Clip.antiAlias,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
     context: context,
     builder:
-        (context) => Column(
-          // mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              audioPlayer.currentTitle,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(audioPlayer.currentChannel),
-            StreamBuilder(
-              stream: audioPlayer.audioPlayer.positionStream,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<Duration> snapshot,
-              ) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.skip_previous),
+        (context) => Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppBar(elevation: 0, backgroundColor: Colors.transparent),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                    imageUrl: audioPlayer.currentThumbnail,
+                    width: 300,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  audioPlayer.currentTitle,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(audioPlayer.currentChannel),
+                const SizedBox(height: 10),
 
-                    if (audioPlayer.isPlaying)
-                      GestureDetector(
-                        onTap: () {
-                          audioPlayer.pauseAudio();
-                        },
-                        child: Icon(Icons.pause),
-                      )
-                    else
-                      GestureDetector(
-                        onTap: () {
-                          audioPlayer.audioPlayer.play();
-                        },
-                        child: Icon(Icons.play_arrow),
-                      ),
+                StreamBuilder(
+                  stream: audioPlayer.audioPlayer.positionStream,
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<Duration> snapshot,
+                  ) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(Icons.skip_previous),
 
-                    Icon(Icons.skip_next),
-                  ],
-                );
-              },
+                        if (audioPlayer.isPlaying)
+                          GestureDetector(
+                            onTap: () {
+                              audioPlayer.pauseAudio();
+                            },
+                            child: Icon(Icons.pause),
+                          )
+                        else
+                          GestureDetector(
+                            onTap: () {
+                              audioPlayer.audioPlayer.play();
+                            },
+                            child: Icon(Icons.play_arrow),
+                          ),
+
+                        Icon(Icons.skip_next),
+                      ],
+                    );
+                  },
+                ),
+                MusicSlider(),
+                CurrentSongText(),
+                // const SizedBox(height: 1000),
+                if (audioPlayer.currentDescription.isNotEmpty)
+                  Text(audioPlayer.currentDescription),
+              ],
             ),
-            MusicSlider(),
-            CurrentSongText(),
-          ],
+          ),
         ),
   );
 }

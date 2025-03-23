@@ -87,6 +87,7 @@ class SearchPage extends StatelessWidget {
                                       result['title'] ?? 'Tidak Ada',
                                       result['thumbnail'] ?? '',
                                       result['channel'] ?? 'Tidak Ada',
+                                      result['description'] ?? 'Tidak Ada',
                                     );
                                   },
                                   icon: Icon(Icons.play_arrow),

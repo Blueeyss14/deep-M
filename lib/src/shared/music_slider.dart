@@ -9,18 +9,6 @@ class MusicSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     final audioPlayer = Provider.of<MusicProvider>(context);
 
-    // String formatDuration(Duration duration) {
-    //   final minutes = duration.inMinutes
-    //       .remainder(60)
-    //       .toString()
-    //       .padLeft(2, '0');
-    //   final seconds = duration.inSeconds
-    //       .remainder(60)
-    //       .toString()
-    //       .padLeft(2, '0');
-    //   return '$minutes:$seconds';
-    // }
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -71,16 +59,6 @@ class MusicSlider extends StatelessWidget {
                           },
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       Text(formatDuration(position)),
-                      //       Text(formatDuration(duration)),
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   );
                 }

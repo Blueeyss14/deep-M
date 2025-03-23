@@ -80,11 +80,24 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                   ),
                                 const SizedBox(width: 10),
                                 Expanded(
-                                  child: Text(
-                                    audioPlayer.currentTitle,
-                                    style: TextStyle(fontSize: 12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        audioPlayer.currentTitle,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        audioPlayer.currentChannel,
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                    ],
                                   ),
                                 ),
+
                                 if (audioPlayer.isPlaying)
                                   GestureDetector(
                                     onTap: () {

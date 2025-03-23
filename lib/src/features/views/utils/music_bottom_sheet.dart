@@ -27,19 +27,26 @@ void musicBottomSheet(BuildContext context) {
                 AppBar(elevation: 0, backgroundColor: Colors.transparent),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    imageUrl: audioPlayer.currentThumbnail,
-                    width: 300,
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
+                  child:
+                      audioPlayer.currentThumbnail.isNotEmpty
+                          ? CachedNetworkImage(
+                            imageUrl: audioPlayer.currentThumbnail,
+                            width: 300,
+                            height: 300,
+                            fit: BoxFit.cover,
+                          )
+                          : const SizedBox(),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   audioPlayer.currentTitle,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text(audioPlayer.currentChannel),
+                Text(
+                  audioPlayer.currentChannel.isNotEmpty
+                      ? audioPlayer.currentChannel
+                      : '',
+                ),
                 const SizedBox(height: 10),
 
                 StreamBuilder(
@@ -77,7 +84,9 @@ void musicBottomSheet(BuildContext context) {
                 CurrentSongText(),
                 // const SizedBox(height: 1000),
                 if (audioPlayer.currentDescription.isNotEmpty)
-                  Text(audioPlayer.currentDescription),
+                  Text(audioPlayer.currentDescription)
+                else
+                  const SizedBox(),
               ],
             ),
           ),

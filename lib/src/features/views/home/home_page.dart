@@ -71,7 +71,9 @@ class _HomePageState extends State<HomePage>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ///MUSIC PLAYER BAR
-                  if (audioPlayer.currentChannel.isNotEmpty) MusicPlayerBar(),
+                  if (audioPlayer.currentChannel.isNotEmpty)
+                    if (ModalRoute.of(context)?.isCurrent == true)
+                      MusicPlayerBar(),
 
                   ///BOTTOM BAR
                   BottomBar(),

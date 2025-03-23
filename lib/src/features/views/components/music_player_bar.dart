@@ -25,7 +25,7 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(8),
           color: Colors.grey[400],
         ),
         clipBehavior: Clip.antiAlias,
@@ -48,6 +48,8 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                       return Column(
                         children: [
                           Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+
                             alignment: Alignment.topLeft,
                             child: LinearProgressIndicator(
                               value:

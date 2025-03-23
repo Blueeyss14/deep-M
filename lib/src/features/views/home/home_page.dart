@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
+import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/views/components/bottom_bar.dart';
 import 'package:deep_m/src/features/views/components/music_player_bar.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     final bottomNavItem = Provider.of<BottombarViemodel>(context);
+    final audioPlayer = Provider.of<MusicProvider>(context);
     super.build(context);
     return Stack(
       children: [
@@ -69,7 +71,7 @@ class _HomePageState extends State<HomePage>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ///MUSIC PLAYER BAR
-                  MusicPlayerBar(),
+                  if (audioPlayer.currentChannel.isNotEmpty) MusicPlayerBar(),
 
                   ///BOTTOM BAR
                   BottomBar(),
@@ -79,28 +81,28 @@ class _HomePageState extends State<HomePage>
           ),
         ),
 
-        // if (ModalRoute.of(context)?.isCurrent == false)
-        // Center(
-        //   child: ClipRect(
-        //     child: BackdropFilter(
-        //       filter: ImageFilter.blur(
-        //         sigmaX: ModalRoute.of(context)?.isCurrent == false ? 2 : 0,
-        //         sigmaY: ModalRoute.of(context)?.isCurrent == false ? 2 : 0,
-        //       ),
-        //       child: AnimatedContainer(
-        //         height:
-        //             ModalRoute.of(context)?.isCurrent == false
-        //                 ? MediaQuery.of(context).size.height
-        //                 : 0,
-        //         width:
-        //             ModalRoute.of(context)?.isCurrent == false
-        //                 ? MediaQuery.of(context).size.width
-        //                 : 0,
-        //         duration: Duration(milliseconds: 100),
-        //       ),
-        //     ),
-        //   ),
-        // ),
+        if (ModalRoute.of(context)?.isCurrent == false)
+          Center(
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: ModalRoute.of(context)?.isCurrent == false ? 2 : 0,
+                  sigmaY: ModalRoute.of(context)?.isCurrent == false ? 2 : 0,
+                ),
+                child: AnimatedContainer(
+                  height:
+                      ModalRoute.of(context)?.isCurrent == false
+                          ? MediaQuery.of(context).size.height
+                          : 0,
+                  width:
+                      ModalRoute.of(context)?.isCurrent == false
+                          ? MediaQuery.of(context).size.width
+                          : 0,
+                  duration: Duration(milliseconds: 100),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

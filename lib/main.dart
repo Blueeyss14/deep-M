@@ -30,6 +30,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (ModalRoute.of(context)?.isCurrent == true) {
+          FocusScope.of(context).unfocus();
+        }
         FocusScope.of(context).unfocus();
       },
       child: MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false),

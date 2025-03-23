@@ -17,6 +17,7 @@ void musicBottomSheet(BuildContext context) {
               audioPlayer.currentTitle,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            Text(audioPlayer.currentChannel),
             StreamBuilder(
               stream: audioPlayer.audioPlayer.positionStream,
               builder: (

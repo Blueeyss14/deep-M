@@ -11,6 +11,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 class MusicProvider extends ChangeNotifier {
   String currentTitle = '';
   String currentThumbnail = '';
+  String currentChannel = '';
   bool isBuffering = false;
   bool isPlaying = false;
 
@@ -55,6 +56,7 @@ class MusicProvider extends ChangeNotifier {
     String videoId,
     String title,
     String thumbnail,
+    String channel,
   ) async {
     if (videoId.isEmpty) {
       ScaffoldMessenger.of(
@@ -68,6 +70,7 @@ class MusicProvider extends ChangeNotifier {
     isBuffering = true;
     currentTitle = title;
     currentThumbnail = thumbnail;
+    currentChannel = channel;
     notifyListeners();
 
     try {

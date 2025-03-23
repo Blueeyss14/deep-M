@@ -43,18 +43,34 @@ class SearchPage extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Row(
                               children: [
-                                CachedNetworkImage(
-                                  imageUrl: result['thumbnail']!,
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(3),
+                                  child: CachedNetworkImage(
+                                    imageUrl: result['thumbnail']!,
+                                    width: 48,
+                                    height: 48,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                const SizedBox(width: 15),
+                                const SizedBox(width: 12),
 
                                 Expanded(
-                                  child: Text(
-                                    result['title'] ?? 'Tidak Ada',
-                                    // overflow: TextOverflow.ellipsis,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        result['title'] ?? 'Tidak Ada',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        result['channel'] ?? 'Tidak Ada',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 IconButton(
@@ -70,6 +86,7 @@ class SearchPage extends StatelessWidget {
                                       result['videoId'] ?? '',
                                       result['title'] ?? 'Tidak Ada',
                                       result['thumbnail'] ?? '',
+                                      result['channel'] ?? 'Tidak Ada',
                                     );
                                   },
                                   icon: Icon(Icons.play_arrow),

@@ -54,6 +54,8 @@ class SearchSongProvider extends ChangeNotifier {
                           (item['snippet']['thumbnails']['default']['url'] ??
                                   '')
                               .toString(),
+                      'channel':
+                          (item['snippet']['channelTitle'] ?? '').toString(),
                     };
                   })
                   .toList();

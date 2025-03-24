@@ -49,8 +49,17 @@ class DownloadSongProvider extends ChangeNotifier {
 
       await for (final data in musicProvider!.youtube.videos.streamsClient.get(
         audioStream,
-      ))
-        ;
+      )) {
+        count += data.length;
+        fileStream.add(data);
+
+        final progress = (count / len * 100).toStringAsFixed(0);
+        downloadStatus[videoId] = false;
+        notifyListeners();
+      }
+
+      downloadStatus[videoId] = true;
+      notifyListeners();
     } catch (e) {}
   }
 }

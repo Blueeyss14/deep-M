@@ -40,7 +40,6 @@ class MusicProvider extends ChangeNotifier {
     // Mendengarkan perubahan status pemutaran
     audioPlayer.playerStateStream.listen((state) {
       isPlaying = state.playing;
-      // Jika status sudah playing dan sedang buffer, ubah isBuffering menjadi false
       if (state.playing && isBuffering) {
         isBuffering = false;
         notifyListeners();
@@ -146,7 +145,6 @@ class MusicProvider extends ChangeNotifier {
         }
       });
 
-      // Pastikan resource dibersihkan dengan benar
       audioPlayer.stop();
     }
   }

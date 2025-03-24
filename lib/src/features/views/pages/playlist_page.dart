@@ -58,19 +58,33 @@ class PlaylistPage extends StatelessWidget {
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
                                   children: [
-                                    Text(
-                                      song['title'] ?? 'Tidak Ada',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          song['title'] ?? 'Tidak Ada',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          song['channel'] ?? 'Tidak Ada',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      song['channel'] ?? 'Tidak Ada',
-                                      style: TextStyle(fontSize: 12),
+                                    IconButton(
+                                      onPressed: () {
+                                        playlistProvider.removeSongFromPlaylist(
+                                          playlistName,
+                                          song,
+                                        );
+                                      },
+                                      icon: Icon(Icons.delete),
                                     ),
                                   ],
                                 ),

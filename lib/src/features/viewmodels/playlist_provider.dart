@@ -52,13 +52,14 @@ class PlaylistProvider extends ChangeNotifier {
       (item) => item['videoId'] == song['videoId'],
     );
 
-    // Hapus playlist jika kosong
+    // delete playlist if isEmpty
     if (playlists[playlistName]!.isEmpty) {
       playlists.remove(playlistName);
     }
     notifyListeners();
 
-    // Simpan perubahan playlist
+    // save playlist changes
     await savePlaylist();
+    notifyListeners();
   }
 }

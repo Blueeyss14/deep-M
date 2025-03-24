@@ -43,4 +43,22 @@ class PlaylistProvider extends ChangeNotifier {
       }
     }
   }
+
+  Future<void> removeSongFromPlaylist(
+    String playlistName,
+    Map<String, String> song,
+  ) async {
+    playlists[playlistName]!.removeWhere(
+      (item) => item['videoId'] == song['videoId'],
+    );
+
+    // Hapus playlist jika kosong
+    if (playlists[playlistName]!.isEmpty) {
+      playlists.remove(playlistName);
+    }
+    notifyListeners();
+
+    // Simpan perubahan playlist
+    await savePlaylist();
+  }
 }

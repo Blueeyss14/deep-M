@@ -13,6 +13,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
     ),
     context: context,
     builder: (context) {
+      final playlistProvider = Provider.of<PlaylistProvider>(context);
       return Container(
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height / 2 + 100,
@@ -24,7 +25,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
               title: Text(
-                "Add Playlist",
+                "Add to Playlist",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -40,17 +41,34 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
             ),
             ElevatedButton(
               onPressed: () {
-                final playlistProvider = Provider.of<PlaylistProvider>(
-                  context,
-                  listen: false,
-                );
                 String playlistName = playlistNameController.text;
                 if (playlistName.isNotEmpty) {
                   playlistProvider.addToPlaylist(playlistName, song);
                   Navigator.pop(context);
                 }
               },
-              child: Text("Add to Playlist"),
+              child: Text("Create Playlist"),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Existing Playlists:",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: playlistProvider.playlists.keys.length,
+                itemBuilder: (context, index) {
+                  String playlistName = playlistProvider.playlists.keys
+                      .elementAt(index);
+                  return ListTile(
+                    title: Text(playlistName),
+                    onTap: () {
+                      playlistProvider.addToPlaylist(playlistName, song);
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),

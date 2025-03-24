@@ -29,26 +29,57 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: playlistNameController,
-                decoration: InputDecoration(
-                  labelText: 'Nama Playlist',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                String playlistName = playlistNameController.text;
-                if (playlistName.isNotEmpty) {
-                  playlistProvider.addToPlaylist(playlistName, song);
-                  Navigator.pop(context);
-                }
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: TextField(
+                                controller: playlistNameController,
+                                decoration: InputDecoration(
+                                  labelText: 'Nama Playlist',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Cancel"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    String playlistName =
+                                        playlistNameController.text;
+                                    if (playlistName.isNotEmpty) {
+                                      playlistProvider.addToPlaylist(
+                                        playlistName,
+                                        song,
+                                      );
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Text("Create Playlist"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                );
               },
-              child: Text("Create Playlist"),
+              child: Text("Add this song"),
             ),
+
             const SizedBox(height: 16),
             Text(
               "Existing Playlists:",

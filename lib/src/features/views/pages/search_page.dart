@@ -101,7 +101,7 @@ class _SearchPageState extends State<SearchPage> {
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      addPlaylistBottomSheet(context);
+                                      addPlaylistBottomSheet(context, result);
                                     });
                                   },
                                   child: Icon(Icons.more_vert),

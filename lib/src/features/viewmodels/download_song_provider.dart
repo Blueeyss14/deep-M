@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class DownloadSongProvider extends ChangeNotifier {
   MusicProvider? musicProvider;
+  static const String _downloadStatusFileName = 'download_status.json';
 
   void initMusicProvider(BuildContext context) {
     musicProvider = Provider.of<MusicProvider>(context, listen: false);
@@ -61,5 +64,22 @@ class DownloadSongProvider extends ChangeNotifier {
       downloadStatus[videoId] = true;
       notifyListeners();
     } catch (e) {}
+  }
+
+  Future<void> saveDownloadStatus() async {
+    try {
+      final file = await getJsonFile(_downloadStatusFileName);
+      final downloadStatusJson = json.encode(downloadStatus);
+      await file.writeAsString(downloadStatusJson);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error saving download status: $e');
+      }
+    }
+  }
+
+  Future<File> getJsonFile(String fileName) async {
+    final path = await _localPath;
+    return File('$path/$fileName');
   }
 }

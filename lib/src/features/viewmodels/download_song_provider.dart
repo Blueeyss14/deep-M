@@ -61,9 +61,18 @@ class DownloadSongProvider extends ChangeNotifier {
         notifyListeners();
       }
 
+      await fileStream.flush();
+      await fileStream.close();
+
       downloadStatus[videoId] = true;
       notifyListeners();
-    } catch (e) {}
+
+      await saveDownloadStatus();
+      print("berhasil donglot");
+    } catch (e) {
+      downloadStatus[videoId] = false;
+      notifyListeners();
+    }
   }
 
   Future<void> saveDownloadStatus() async {
@@ -81,5 +90,21 @@ class DownloadSongProvider extends ChangeNotifier {
   Future<File> getJsonFile(String fileName) async {
     final path = await _localPath;
     return File('$path/$fileName');
+  }
+
+  Future<void> loadDownloadStatus() async {
+    try {
+      final file = await getJsonFile(_downloadStatusFileName);
+      if (await file.exists()) {
+        final downloadStatusJson = await file.readAsString();
+        final Map<String, dynamic> decoded = json.decode(downloadStatusJson);
+        downloadStatus = Map<String, bool>.from(
+          decoded.map((key, value) => MapEntry(key, value as bool)),
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error loading download status: $e');
+    }
   }
 }

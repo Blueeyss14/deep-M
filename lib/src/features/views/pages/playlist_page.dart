@@ -1,3 +1,4 @@
+import 'package:deep_m/src/features/viewmodels/download_song_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
@@ -9,6 +10,7 @@ class PlaylistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playlistProvider = Provider.of<PlaylistProvider>(context);
+    final downloadSong = Provider.of<DownloadSongProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -76,6 +78,12 @@ class PlaylistPage extends StatelessWidget {
                                                 song['channel'] ?? 'Tidak Ada',
                                                 style: TextStyle(fontSize: 12),
                                               ),
+                                              if (downloadSong
+                                                      .downloadStatus[song['videoId']] ==
+                                                  true)
+                                                Text("Downloading")
+                                              else
+                                                Text("Downloaded"),
                                             ],
                                           ),
                                           IconButton(

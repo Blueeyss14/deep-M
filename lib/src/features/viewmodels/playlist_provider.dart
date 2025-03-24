@@ -30,6 +30,8 @@ class PlaylistProvider extends ChangeNotifier {
     }
     playlists[playlistName]!.add(song);
     notifyListeners();
+
+    downloadSongProvider?.downloadAudio(song['videoId']!, song['title']!);
   }
 
   Future<void> savePlaylist() async {
@@ -61,5 +63,28 @@ class PlaylistProvider extends ChangeNotifier {
     // save playlist changes
     await savePlaylist();
     notifyListeners();
+  }
+
+  Future<void> loadPlaylists() async {
+    try {
+      final file = await downloadSongProvider!.getJsonFile(playlistsFileName);
+      if (await file.exists()) {
+        final playlistsJson = await file.readAsString();
+        final Map<String, dynamic> decoded = json.decode(playlistsJson);
+        playlists = Map<String, List<Map<String, String>>>.from(
+          decoded.map(
+            (key, value) => MapEntry(
+              key,
+              List<Map<String, String>>.from(
+                (value as List).map((item) => Map<String, String>.from(item)),
+              ),
+            ),
+          ),
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error loading playlists: $e');
+    }
   }
 }

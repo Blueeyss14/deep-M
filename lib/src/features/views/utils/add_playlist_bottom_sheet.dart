@@ -19,6 +19,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
           maxHeight: MediaQuery.of(context).size.height / 2 + 100,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppBar(
               elevation: 0,
@@ -81,24 +82,26 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
             ),
 
             const SizedBox(height: 16),
-            Text(
-              "Existing Playlists:",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+
             Expanded(
-              child: ListView.builder(
-                itemCount: playlistProvider.playlists.keys.length,
-                itemBuilder: (context, index) {
-                  String playlistName = playlistProvider.playlists.keys
-                      .elementAt(index);
-                  return ListTile(
-                    title: Text(playlistName),
+              child: ListView(
+                children: List.generate(
+                  playlistProvider.playlists.keys.length,
+                  (index) => GestureDetector(
                     onTap: () {
+                      String playlistName = playlistProvider.playlists.keys
+                          .elementAt(index);
                       playlistProvider.addToPlaylist(playlistName, song);
                       Navigator.pop(context);
                     },
-                  );
-                },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        playlistProvider.playlists.keys.elementAt(index),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

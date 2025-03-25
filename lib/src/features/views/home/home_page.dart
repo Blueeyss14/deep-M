@@ -7,6 +7,7 @@ import 'package:deep_m/src/features/views/components/music_player_bar.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
 import 'package:deep_m/src/features/views/pages/song_home_page.dart';
+import 'package:deep_m/src/shared/test/ui_test.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -80,6 +81,16 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
             ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UiTest()),
+                );
+              });
+            },
           ),
         ),
 

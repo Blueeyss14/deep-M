@@ -17,7 +17,6 @@ class _PlaylistPageState extends State<PlaylistPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize providers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeProviders();
     });
@@ -53,24 +52,40 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text("Playlist Offline"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () async {
-              await _initializeProviders();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Menyegarkan playlist..."),
-                  duration: Duration(seconds: 1),
-                ),
-              );
-            },
-            tooltip: "Refresh",
-          ),
-        ],
+
+      // appBar: AppBar(
+      //   title: Text("Playlist Offline"),
+      //   actions: [
+      //     IconButton(
+      //       icon: Icon(Icons.refresh),
+      //       onPressed: () async {
+      //         await _initializeProviders();
+      //         ScaffoldMessenger.of(context).showSnackBar(
+      //           SnackBar(
+      //             content: Text("Menyegarkan playlist..."),
+      //             duration: Duration(seconds: 1),
+      //           ),
+      //         );
+      //       },
+      //     ),
+      //   ],
+      // ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: List.generate(4, (index) {
+                return Container(color: Colors.green, height: 100, width: 120);
+              }),
+            ),
+          ],
+        ),
       ),
+
+      /*
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child:
@@ -271,6 +286,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   ),
                 ),
       ),
+      */
     );
   }
 

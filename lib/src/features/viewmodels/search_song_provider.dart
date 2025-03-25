@@ -36,7 +36,7 @@ class SearchSongProvider extends ChangeNotifier {
           if (data['error']['code'] == 403) {
             errorMessage = 'Limit API Habis';
           } else if (data['error']['code'] == 400) {
-            errorMessage = 'API Key Salah';
+            errorMessage = 'API Key Error';
           }
           throw Exception(errorMessage);
         }
@@ -61,7 +61,7 @@ class SearchSongProvider extends ChangeNotifier {
                   })
                   .toList();
         } else {
-          throw Exception('Gagal mencari video');
+          throw Exception('Failed to search video');
         }
       }
     } catch (e) {
@@ -70,7 +70,7 @@ class SearchSongProvider extends ChangeNotifier {
       if (e.toString().contains('Socket') ||
           e.toString().contains('Connection')) {
         errorMessage = 'No Internet';
-      } else if (e.toString().contains('Limit API Habis')) {
+      } else if (e.toString().contains('API Limited')) {
         errorMessage = 'API Limited';
       }
     } finally {

@@ -92,7 +92,10 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         ),
                         subtitle: Text("${songs.length} lagu"),
                         children:
-                            songs.map((song) {
+                            songs.asMap().entries.map((entry) {
+                              int songIndex = entry.key;
+                              Map<String, String> song = entry.value;
+
                               final videoId = song['videoId'] ?? '';
                               final downloadStatus =
                                   downloadSongProvider.downloadStatus[videoId];
@@ -107,13 +110,10 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                 ),
                                 child: GestureDetector(
                                   onTap: () {
-                                    musicProvider.playAudio(
+                                    musicProvider.startPlaylist(
                                       context,
-                                      song['videoId'] ?? '',
-                                      song['title'] ?? 'Tidak Ada',
-                                      song['thumbnail'] ?? '',
-                                      song['channel'] ?? 'Tidak Ada',
-                                      song['description'] ?? 'Tidak Ada',
+                                      playlistName,
+                                      songIndex,
                                     );
                                   },
                                   child: Row(
@@ -207,7 +207,6 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                             ),
                                             Row(
                                               children: [
-                                                // Tombol download jika file belum terdownload atau rusak
                                                 if (downloadStatus != true)
                                                   IconButton(
                                                     onPressed: () {

@@ -21,7 +21,7 @@ class PlaylistProvider extends ChangeNotifier {
         listen: false,
       );
       _isInitialized = true;
-      loadPlaylists(); // Load playlists once the provider is initialized
+      loadPlaylists();
     }
   }
 
@@ -34,7 +34,6 @@ class PlaylistProvider extends ChangeNotifier {
       playlists[playlistName] = [];
     }
 
-    // Check if song already exists in the playlist
     bool songExists =
         playlists[playlistName]?.any(
           (item) => item['videoId'] == song['videoId'],
@@ -46,15 +45,12 @@ class PlaylistProvider extends ChangeNotifier {
       notifyListeners();
 
       if (downloadSongProvider != null) {
-        // Start downloading the song automatically when added to playlist
         downloadSongProvider!.downloadAudio(
           song['videoId']!,
           song['title']!,
           context,
         );
       } else {
-        print("Peringatan: downloadSongProvider belum diinisialisasi");
-        // Try to initialize it
         initDownloadSongProvider(context);
         if (downloadSongProvider != null) {
           downloadSongProvider!.downloadAudio(
@@ -80,7 +76,6 @@ class PlaylistProvider extends ChangeNotifier {
         ),
       );
     } else {
-      // If song already exists, just show a message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Lagu sudah ada di playlist"),
@@ -93,9 +88,7 @@ class PlaylistProvider extends ChangeNotifier {
   Future<void> savePlaylist() async {
     try {
       if (downloadSongProvider == null) {
-        print(
-          "Error: Tidak bisa menyimpan playlist, downloadSongProvider null",
-        );
+        print("Error: null");
         return;
       }
 
@@ -105,7 +98,7 @@ class PlaylistProvider extends ChangeNotifier {
       print("Playlist tersimpan");
     } catch (e) {
       if (kDebugMode) {
-        print('Error saat menyimpan playlist: $e');
+        print('Error zzz: $e');
       }
     }
   }
@@ -118,23 +111,19 @@ class PlaylistProvider extends ChangeNotifier {
       (item) => item['videoId'] == song['videoId'],
     );
 
-    // delete playlist if isEmpty
     if (playlists[playlistName]!.isEmpty) {
       playlists.remove(playlistName);
     }
     notifyListeners();
 
-    // save playlist changes
     await savePlaylist();
   }
 
-  // Download semua lagu yang belum terdownload
   Future<void> downloadAllPendingSongs(BuildContext context) async {
     if (downloadSongProvider == null || playlists.isEmpty) return;
 
-    print("Memeriksa lagu-lagu yang belum didownload...");
+    print("checking download...");
 
-    // Buat daftar lagu yang perlu didownload
     List<Map<String, String>> songsToDownload = [];
 
     for (var playlistName in playlists.keys) {
@@ -142,7 +131,6 @@ class PlaylistProvider extends ChangeNotifier {
         final videoId = song['videoId'];
         if (videoId == null || videoId.isEmpty) continue;
 
-        // Periksa apakah file sudah ada
         final fileExists = await downloadSongProvider!.isAudioFileExists(
           videoId,
         );
@@ -153,34 +141,29 @@ class PlaylistProvider extends ChangeNotifier {
       }
     }
 
-    if (songsToDownload.isEmpty) {
-      print("Semua lagu sudah terdownload");
-      return;
-    }
+    if (songsToDownload.isEmpty) return;
 
-    print("Menemukan ${songsToDownload.length} lagu yang perlu didownload");
+    print("${songsToDownload.length}");
 
-    // Tampilkan notifikasi
+    // notification
     if (context.mounted && songsToDownload.length > 3) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Mendownload ${songsToDownload.length} lagu..."),
+          content: Text("Downloading ${songsToDownload.length} songs..."),
           duration: Duration(seconds: 3),
         ),
       );
     }
 
-    // Download lagu satu per satu
     for (var song in songsToDownload) {
       if (!context.mounted) break;
 
       await downloadSongProvider!.downloadAudio(
         song['videoId']!,
-        song['title'] ?? 'Lagu tanpa judul',
+        song['title'] ?? 'No Title',
         context,
       );
 
-      // Beri jeda agar tidak membebani jaringan
       await Future.delayed(Duration(milliseconds: 500));
     }
   }
@@ -191,9 +174,6 @@ class PlaylistProvider extends ChangeNotifier {
 
     try {
       if (downloadSongProvider == null) {
-        print(
-          "Peringatan: Tidak bisa memuat playlist, downloadSongProvider null",
-        );
         _isLoadingPlaylists = false;
         return;
       }
@@ -201,7 +181,6 @@ class PlaylistProvider extends ChangeNotifier {
       final file = await downloadSongProvider!.getJsonFile(playlistsFileName);
       if (await file.exists()) {
         final playlistsJson = await file.readAsString();
-        print("Memuat playlist dari penyimpanan...");
 
         try {
           final Map<String, dynamic> decoded = json.decode(playlistsJson);
@@ -215,9 +194,7 @@ class PlaylistProvider extends ChangeNotifier {
               ),
             ),
           );
-          print("Berhasil memuat ${playlists.length} playlist");
 
-          // Check if any songs need to be downloaded
           for (var playlistName in playlists.keys) {
             for (var song in playlists[playlistName]!) {
               final videoId = song['videoId'];
@@ -225,7 +202,7 @@ class PlaylistProvider extends ChangeNotifier {
                 final fileExists = await downloadSongProvider!
                     .isAudioFileExists(videoId);
                 if (!fileExists) {
-                  // Song file doesn't exist, mark it for download later
+                  // download later
                   downloadSongProvider!.downloadStatus[videoId] = null;
                 } else {
                   // File exists, mark as downloaded
@@ -235,17 +212,17 @@ class PlaylistProvider extends ChangeNotifier {
             }
           }
 
-          // Simpan status download yang diperbarui
+          // Simpan status download yg baru
           await downloadSongProvider!.saveDownloadStatus();
           notifyListeners();
         } catch (parseError) {
-          print("Error saat parsing playlist: $parseError");
+          print("Error: $parseError");
         }
       } else {
-        print("Tidak ada file playlist, membuat yang baru");
+        print("No file playlist");
       }
     } catch (e) {
-      print('Error saat memuat playlist: $e');
+      print('Error: $e');
     } finally {
       _isLoadingPlaylists = false;
     }

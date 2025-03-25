@@ -42,21 +42,21 @@ class DownloadSongProvider extends ChangeNotifier {
       final exists = await file.exists();
       final fileSize = exists ? await file.length() : 0;
 
-      // Verifikasi bahwa file tidak kosong (minimal 10KB)
+      // Verifikasi bahwa file tidak kosong (minimal 10KB lah)
       return exists && fileSize > 10 * 1024;
     } catch (e) {
-      print("Error memeriksa file: $e");
+      print("Error checking file: $e");
       return false;
     }
   }
 
-  // Fungsi untuk paksa download ulang
+  // force to download
   Future<void> forceRedownload(
     String videoId,
     String title,
     BuildContext context,
   ) async {
-    // Hapus file lama jika ada
+    // delete old file if exists
     final file = await getAudioFile(videoId);
     if (await file.exists()) {
       await file.delete();
@@ -66,7 +66,6 @@ class DownloadSongProvider extends ChangeNotifier {
     downloadStatus[videoId] = null;
     notifyListeners();
 
-    // Download ulang
     await downloadAudio(videoId, title, context);
   }
 
@@ -81,7 +80,6 @@ class DownloadSongProvider extends ChangeNotifier {
       return;
     }
 
-    // Initialize music provider if not already done
     if (musicProvider == null) {
       initMusicProvider(context);
     }
@@ -94,44 +92,37 @@ class DownloadSongProvider extends ChangeNotifier {
       final fileSize = await file.length();
 
       if (fileSize > 10 * 1024) {
-        // Minimal 10KB
+        // 10kb
         downloadStatus[videoId] = true;
         await saveDownloadStatus();
         notifyListeners();
-        print("File sudah ada: ${file.path} (${fileSize ~/ 1024} KB)");
+        print("File is exists: ${file.path} (${fileSize ~/ 1024} KB)");
         return;
       } else {
-        // File ada tapi kosong/corrupt
-        print("File ada tapi sepertinya rusak, mendownload ulang...");
         await file.delete();
       }
     }
 
     // Don't download if already downloading
-    if (downloadStatus[videoId] == false) {
-      print("Sudah dalam proses download, menunggu...");
-      return;
-    }
+    if (downloadStatus[videoId] == false) return;
 
     downloadStatus[videoId] = false;
     notifyListeners();
 
     try {
-      print("Mulai download lagu: $title (ID: $videoId)");
-      // Use the injected YouTube instance instead of relying on musicProvider
+      print("start download: $title (ID: $videoId)");
       final manifest = await youtube.videos.streamsClient.getManifest(videoId);
       final audioStreams = manifest.audioOnly.toList();
 
       if (audioStreams.isEmpty) {
-        throw Exception('Tidak ada audio yang tersedia untuk lagu ini');
+        throw Exception('No audio available');
       }
 
-      // Pilih kualitas audio tertinggi agar tidak terlalu kecil
       audioStreams.sort((a, b) => b.bitrate.compareTo(a.bitrate));
       final audioStream = audioStreams.first;
 
       print(
-        "Mendapatkan audio: ${audioStream.bitrate.kiloBitsPerSecond} kbps, ${audioStream.size.totalMegaBytes.toStringAsFixed(2)} MB",
+        "Get the audio quality: ${audioStream.bitrate.kiloBitsPerSecond} kbps, ${audioStream.size.totalMegaBytes.toStringAsFixed(2)} MB",
       );
 
       final fileStream = file.openWrite();
@@ -145,8 +136,8 @@ class DownloadSongProvider extends ChangeNotifier {
         // Display progress percentage
         final progress = (count / len * 100).toStringAsFixed(0);
         if (int.parse(progress) % 10 == 0) {
-          // Only log every 10%
-          print("Download progress: $progress% untuk $title");
+          // log every 10%
+          print("Download progress: $progress% for $title");
         }
 
         downloadStatus[videoId] = false;
@@ -160,9 +151,7 @@ class DownloadSongProvider extends ChangeNotifier {
       final fileSize = await file.length();
       if (fileSize < 10 * 1024) {
         // Kurang dari 10KB
-        throw Exception(
-          'File hasil download terlalu kecil (${fileSize ~/ 1024} KB), kemungkinan error',
-        );
+        throw Exception('(${fileSize ~/ 1024} KB)');
       }
 
       print("Download selesai: ${file.path} (${fileSize ~/ 1024} KB)");
@@ -170,11 +159,11 @@ class DownloadSongProvider extends ChangeNotifier {
       await saveDownloadStatus();
       notifyListeners();
 
-      // Tampilkan notifikasi bahwa lagu sudah tersedia offline
+      // Tampilkan notifikasi offline
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Lagu "$title" tersedia offline'),
+            content: Text('"$title" is available offline'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -191,10 +180,10 @@ class DownloadSongProvider extends ChangeNotifier {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Gagal mendownload: ${e.toString()}'),
+            content: Text('Failed to download: ${e.toString()}'),
             duration: Duration(seconds: 3),
             action: SnackBarAction(
-              label: 'Coba Lagi',
+              label: 'Try Again',
               onPressed: () {
                 forceRedownload(videoId, title, context);
               },
@@ -212,7 +201,7 @@ class DownloadSongProvider extends ChangeNotifier {
       await file.writeAsString(downloadStatusJson);
     } catch (e) {
       if (kDebugMode) {
-        print('Error menyimpan status download: $e');
+        print('Error saving download status: $e');
       }
     }
   }
@@ -238,15 +227,11 @@ class DownloadSongProvider extends ChangeNotifier {
         for (final videoId in downloadStatus.keys.toList()) {
           final exists = await isAudioFileExists(videoId);
           if (!exists && downloadStatus[videoId] == true) {
-            // File marked as downloaded but doesn't exist
-            print(
-              "File untuk $videoId ditandai sudah didownload tapi tidak ditemukan",
-            );
             downloadStatus[videoId] = null;
           }
         }
 
-        await saveDownloadStatus(); // Save any corrections
+        await saveDownloadStatus();
         notifyListeners();
       }
     } catch (e) {

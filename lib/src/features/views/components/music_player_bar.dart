@@ -49,7 +49,6 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                         children: [
                           Container(
                             margin: const EdgeInsets.symmetric(horizontal: 8),
-
                             alignment: Alignment.topLeft,
                             child: LinearProgressIndicator(
                               value:
@@ -64,12 +63,14 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 if (audioPlayer.currentThumbnail.isEmpty)
-                                  const Icon(Icons.music_note)
+                                  const Icon(Icons.music_note, size: 40)
                                 else
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(3),
@@ -91,29 +92,86 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       Text(
-                                        audioPlayer.currentChannel,
+                                        audioPlayer.isPlayingOffline
+                                            ? "🎵 ${audioPlayer.currentChannel} (offline)"
+                                            : audioPlayer.currentChannel,
                                         style: TextStyle(fontSize: 12),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ],
                                   ),
                                 ),
 
-                                if (audioPlayer.isPlaying)
-                                  GestureDetector(
-                                    onTap: () {
-                                      audioPlayer.pauseAudio();
-                                    },
-                                    child: Icon(Icons.pause),
-                                  )
-                                else
-                                  GestureDetector(
-                                    onTap: () {
-                                      audioPlayer.audioPlayer.play();
-                                    },
-                                    child: Icon(Icons.play_arrow),
-                                  ),
+                                // Control buttons
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    _buildRepeatModeButton(audioPlayer),
+
+                                    if (audioPlayer.isPlayingFromPlaylist)
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.skip_previous,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          audioPlayer.playPreviousSong(context);
+                                        },
+                                        tooltip: 'Lagu sebelumnya',
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(
+                                          minWidth: 32,
+                                          minHeight: 32,
+                                        ),
+                                      ),
+
+                                    if (audioPlayer.isPlaying)
+                                      IconButton(
+                                        icon: Icon(Icons.pause),
+                                        onPressed: () {
+                                          audioPlayer.pauseAudio();
+                                        },
+                                        tooltip: 'Pause',
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(
+                                          minWidth: 40,
+                                          minHeight: 40,
+                                        ),
+                                      )
+                                    else
+                                      IconButton(
+                                        icon: Icon(Icons.play_arrow),
+                                        onPressed: () {
+                                          audioPlayer.audioPlayer.play();
+                                        },
+                                        tooltip: 'Play',
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(
+                                          minWidth: 40,
+                                          minHeight: 40,
+                                        ),
+                                      ),
+
+                                    if (audioPlayer.isPlayingFromPlaylist)
+                                      IconButton(
+                                        icon: Icon(Icons.skip_next, size: 20),
+                                        onPressed: () {
+                                          audioPlayer.playNextSong(context);
+                                        },
+                                        tooltip: 'Lagu berikutnya',
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(
+                                          minWidth: 32,
+                                          minHeight: 32,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -125,6 +183,59 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  // Membuat tombol repeat mode
+  Widget _buildRepeatModeButton(MusicProvider audioPlayer) {
+    // Cek apakah sedang memutar dari playlist
+    final bool isPlaylist = audioPlayer.isPlayingFromPlaylist;
+
+    IconData iconData;
+    Color iconColor;
+    String tooltip;
+
+    switch (audioPlayer.repeatMode) {
+      case RepeatMode.none:
+        iconData = Icons.repeat;
+        iconColor = Colors.grey;
+        tooltip = 'Sekali saja';
+        break;
+      case RepeatMode.playlist:
+        iconData = Icons.repeat;
+        iconColor = isPlaylist ? Colors.black : Colors.grey[400]!;
+        tooltip =
+            isPlaylist
+                ? 'Putar semua lagu di playlist'
+                : 'Mode tidak tersedia (tidak dalam playlist)';
+        break;
+      case RepeatMode.single:
+        iconData = Icons.repeat_one;
+        iconColor = Colors.black;
+        tooltip = 'Ulang lagu ini';
+        break;
+    }
+
+    return GestureDetector(
+      onTap: () {
+        // Jika mode playlist tapi tidak sedang dalam playlist,
+        // skip mode playlist dan langsung ke single
+        if (audioPlayer.repeatMode == RepeatMode.none && !isPlaylist) {
+          // Toggle sekali untuk ke playlist
+          audioPlayer.toggleLoopMode();
+          // Toggle lagi untuk langsung ke single
+          audioPlayer.toggleLoopMode();
+        } else {
+          audioPlayer.toggleLoopMode();
+        }
+      },
+      child: Tooltip(
+        message: tooltip,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Icon(iconData, color: iconColor, size: 20),
         ),
       ),
     );

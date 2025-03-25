@@ -22,7 +22,6 @@ class BufferingAudio extends ChangeNotifier {
     // Hentikan timer sebelumnya jika ada
     _preBufferTimer?.cancel();
 
-    // Mulai pre-buffering setiap 15 detik
     _preBufferTimer = Timer.periodic(const Duration(seconds: 15), (
       timer,
     ) async {
@@ -34,18 +33,16 @@ class BufferingAudio extends ChangeNotifier {
           // Cek apakah posisi ini sudah pernah di-buffer
           if (playedSegments.containsKey(videoId) &&
               playedSegments[videoId]!.contains(currentPosition)) {
-            return; // Skip buffering jika posisi sudah pernah di-buffer
+            return;
           }
 
-          // Tambahkan posisi yang sudah di-buffer ke dalam set
           if (playedSegments.containsKey(videoId)) {
             playedSegments[videoId]!.add(currentPosition);
           } else {
             playedSegments[videoId] = {currentPosition};
           }
         } catch (e) {
-          print('Pre-buffering gagal: $e');
-          // Coba lagi setelah beberapa detik
+          print('Pre-buffering error: $e');
           await Future.delayed(Duration(seconds: 2));
         }
       }

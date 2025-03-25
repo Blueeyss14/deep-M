@@ -15,6 +15,7 @@ class MusicProvider extends ChangeNotifier {
   String currentDescription = '';
   bool isBuffering = false;
   bool isPlaying = false;
+  bool isPlayingOffline = false;
 
   final AudioPlayer audioPlayer = AudioPlayer();
   final YoutubeExplode youtube = YoutubeExplode();
@@ -31,6 +32,35 @@ class MusicProvider extends ChangeNotifier {
   Future<File> getAudioFile(String videoId) async {
     final path = await _localPath;
     return File('$path/$videoId.mp3');
+  }
+
+  // Cek apakah file sudah terdownload dan valid
+  Future<bool> isAudioDownloaded(String videoId) async {
+    try {
+      final file = await getAudioFile(videoId);
+      final exists = await file.exists();
+
+      if (!exists) return false;
+
+      final fileSize = await file.length();
+      return fileSize > 10 * 1024; // Minimal 10KB
+    } catch (e) {
+      print("Error memeriksa file audio: $e");
+      return false;
+    }
+  }
+
+  // Cek apakah internet tersedia
+  Future<bool> hasInternetConnection() async {
+    try {
+      final result = await InternetAddress.lookup('youtube.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    } catch (e) {
+      print("Error memeriksa koneksi: $e");
+      return false;
+    }
   }
 
   //Initialization of Bufering Audio
@@ -62,7 +92,7 @@ class MusicProvider extends ChangeNotifier {
     if (videoId.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Video is empty')));
+      ).showSnackBar(const SnackBar(content: Text('ID Video kosong')));
       return;
     }
 
@@ -77,42 +107,37 @@ class MusicProvider extends ChangeNotifier {
 
     try {
       final file = await getAudioFile(videoId);
+      final isDownloaded = await isAudioDownloaded(videoId);
 
-      if (await file.exists()) {
-        // Play local file if it exists
-        print("Playing local file for: $title");
-        await audioPlayer.setFilePath(file.path);
-      } else {
-        // Otherwise attempt to stream
-        String? audioUrl = _audioStreamUrl[videoId];
+      if (isDownloaded) {
+        // Putar file lokal jika ada
+        print("Memutar file lokal: $title");
+        try {
+          await audioPlayer.setFilePath(file.path);
+          isPlayingOffline = true;
+        } catch (e) {
+          print("Error memutar file lokal: $e");
+          // Jika gagal memutar file lokal, coba streaming
+          isPlayingOffline = false;
 
-        if (audioUrl == null) {
-          try {
-            var manifest = await youtube.videos.streamsClient.getManifest(
-              videoId,
-            );
-            var audioStreams = manifest.audioOnly.toList();
-            audioStreams.sort((a, b) => a.bitrate.compareTo(b.bitrate));
-
-            var audioStream = audioStreams.isNotEmpty ? audioStreams[0] : null;
-
-            if (audioStream == null) {
-              throw Exception('Audio Stream Not Found');
-            }
-
-            audioUrl = audioStream.url.toString();
-            _audioStreamUrl[videoId] = audioUrl;
-          } catch (e) {
-            if (e.toString().contains('Socket') ||
-                e.toString().contains('Connection')) {
-              throw Exception(
-                'No Internet Connection. Try downloading this song first.',
-              );
-            }
-            rethrow;
+          // Periksa koneksi sebelum streaming
+          final hasInternet = await hasInternetConnection();
+          if (!hasInternet) {
+            throw Exception('Tidak ada koneksi internet dan file lokal rusak.');
           }
+
+          await _playFromStream(videoId);
         }
-        await audioPlayer.setUrl(audioUrl);
+      } else {
+        // Periksa koneksi sebelum streaming
+        final hasInternet = await hasInternetConnection();
+        if (!hasInternet) {
+          throw Exception('Tidak ada koneksi internet. Lagu belum didownload.');
+        }
+
+        // Stream dari YouTube
+        isPlayingOffline = false;
+        await _playFromStream(videoId);
       }
 
       await audioPlayer.seek(Duration.zero);
@@ -143,16 +168,53 @@ class MusicProvider extends ChangeNotifier {
         try {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Gagal memutar audio: ${e.toString()}')),
+              SnackBar(
+                content: Text('Gagal memutar audio: ${e.toString()}'),
+                duration: Duration(seconds: 3),
+              ),
             );
           }
         } catch (uiError) {
-          debugPrint('Error: $uiError');
+          debugPrint('Error UI: $uiError');
         }
       });
 
       audioPlayer.stop();
     }
+  }
+
+  // Metode untuk streaming dari YouTube
+  Future<void> _playFromStream(String videoId) async {
+    String? audioUrl = _audioStreamUrl[videoId];
+
+    if (audioUrl == null) {
+      try {
+        print("Mencoba stream dari YouTube untuk: $videoId");
+        var manifest = await youtube.videos.streamsClient.getManifest(videoId);
+        var audioStreams = manifest.audioOnly.toList();
+        audioStreams.sort((a, b) => b.bitrate.compareTo(a.bitrate));
+
+        var audioStream = audioStreams.isNotEmpty ? audioStreams[0] : null;
+
+        if (audioStream == null) {
+          throw Exception('Audio tidak ditemukan');
+        }
+
+        audioUrl = audioStream.url.toString();
+        _audioStreamUrl[videoId] = audioUrl;
+        print("Streaming dari: ${audioStream.bitrate.kiloBitsPerSecond} kbps");
+      } catch (e) {
+        if (e.toString().contains('Socket') ||
+            e.toString().contains('Connection')) {
+          throw Exception(
+            'Tidak ada koneksi internet. Download lagu ini dulu.',
+          );
+        }
+        rethrow;
+      }
+    }
+
+    await audioPlayer.setUrl(audioUrl);
   }
 
   void pauseAudio() async {

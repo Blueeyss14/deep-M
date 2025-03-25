@@ -37,8 +37,9 @@ class MyAppProvider {
           update: (context, downloadProvider, playlistProvider) {
             final provider = playlistProvider ?? PlaylistProvider();
             provider.downloadSongProvider = downloadProvider;
-            // Load playlists after provider initialization
-            Future.microtask(() => provider.loadPlaylists());
+            Future.microtask(() {
+              provider.loadPlaylists();
+            });
             return provider;
           },
         ),

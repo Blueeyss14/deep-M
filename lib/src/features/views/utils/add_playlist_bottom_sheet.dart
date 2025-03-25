@@ -31,10 +31,62 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
               backgroundColor: Colors.amber,
               surfaceTintColor: Colors.transparent,
               title: Text(
-                "Add to Playlist",
+                "Tambahkan ke Playlist",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Image.network(
+                      song['thumbnail'] ?? '',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.grey[300],
+                          child: Icon(Icons.music_note),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          song['title'] ?? 'Tidak ada judul',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          song['channel'] ?? 'Tidak ada channel',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[700],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -46,7 +98,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                           context: context,
                           builder:
                               (context) => AlertDialog(
-                                title: Text('Create New Playlist'),
+                                title: Text('Buat Playlist Baru'),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -55,9 +107,27 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                       child: TextField(
                                         controller: playlistNameController,
                                         decoration: InputDecoration(
-                                          labelText: 'Playlist Name',
+                                          labelText: 'Nama Playlist',
+                                          hintText: 'Contoh: Favorit Saya',
                                           border: OutlineInputBorder(),
                                         ),
+                                        autofocus: true,
+                                        textInputAction: TextInputAction.done,
+                                        onSubmitted: (value) {
+                                          if (value.trim().isNotEmpty) {
+                                            playlistProvider.addToPlaylist(
+                                              value.trim(),
+                                              song,
+                                              context,
+                                            );
+                                            Navigator.pop(
+                                              context,
+                                            ); // Close dialog
+                                            Navigator.pop(
+                                              context,
+                                            ); // Close sheet
+                                          }
+                                        },
                                       ),
                                     ),
                                     Row(
@@ -68,7 +138,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                          child: Text("Cancel"),
+                                          child: Text("Batal"),
                                         ),
                                         ElevatedButton(
                                           onPressed: () {
@@ -87,22 +157,9 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                               Navigator.pop(
                                                 context,
                                               ); // Close bottom sheet
-
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                    "Ditambahkan ke playlist: $playlistName",
-                                                  ),
-                                                  duration: Duration(
-                                                    seconds: 2,
-                                                  ),
-                                                ),
-                                              );
                                             }
                                           },
-                                          child: Text("Create Playlist"),
+                                          child: Text("Buat Playlist"),
                                         ),
                                       ],
                                     ),
@@ -117,15 +174,15 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                         alignment: Alignment.topLeft,
                         child: Row(
                           children: [
+                            Icon(Icons.playlist_add, size: 26),
+                            const SizedBox(width: 10),
                             Text(
-                              "Create New Playlist",
+                              "Buat Playlist Baru",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            Icon(Icons.add_rounded),
                           ],
                         ),
                       ),
@@ -138,7 +195,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                         padding: const EdgeInsets.all(16.0),
                         child: Center(
                           child: Text(
-                            "No playlists yet. Create your first playlist!",
+                            "Belum ada playlist. Buat playlist pertama Anda!",
                             style: TextStyle(color: Colors.grey),
                             textAlign: TextAlign.center,
                           ),
@@ -155,9 +212,10 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                 .keys
                                 .elementAt(index);
                             return ListTile(
+                              leading: Icon(Icons.playlist_play, size: 30),
                               title: Text(playlistName),
                               subtitle: Text(
-                                "${playlistProvider.playlists[playlistName]?.length ?? 0} songs",
+                                "${playlistProvider.playlists[playlistName]?.length ?? 0} lagu",
                                 style: TextStyle(fontSize: 12),
                               ),
                               onTap: () {
@@ -167,15 +225,6 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                   context,
                                 );
                                 Navigator.pop(context);
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Ditambahkan ke playlist: $playlistName",
-                                    ),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
                               },
                             );
                           },

@@ -15,6 +15,10 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
     context: context,
     builder: (context) {
       final playlistProvider = Provider.of<PlaylistProvider>(context);
+
+      // Make sure providers are initialized
+      playlistProvider.initDownloadSongProvider(context);
+
       return Container(
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height / 2 + 100,
@@ -42,6 +46,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                           context: context,
                           builder:
                               (context) => AlertDialog(
+                                title: Text('Create New Playlist'),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -56,8 +61,10 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                       ),
                                     ),
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        ElevatedButton(
+                                        TextButton(
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
@@ -66,13 +73,33 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                         ElevatedButton(
                                           onPressed: () {
                                             String playlistName =
-                                                playlistNameController.text;
+                                                playlistNameController.text
+                                                    .trim();
                                             if (playlistName.isNotEmpty) {
                                               playlistProvider.addToPlaylist(
                                                 playlistName,
                                                 song,
+                                                context,
                                               );
-                                              Navigator.pop(context);
+                                              Navigator.pop(
+                                                context,
+                                              ); // Close dialog
+                                              Navigator.pop(
+                                                context,
+                                              ); // Close bottom sheet
+
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    "Ditambahkan ke playlist: $playlistName",
+                                                  ),
+                                                  duration: Duration(
+                                                    seconds: 2,
+                                                  ),
+                                                ),
+                                              );
                                             }
                                           },
                                           child: Text("Create Playlist"),
@@ -106,34 +133,54 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
 
                     const SizedBox(height: 16),
 
-                    Expanded(
-                      child: ListView(
-                        children: List.generate(
-                          playlistProvider.playlists.keys.length,
-                          (index) => GestureDetector(
-                            onTap: () {
-                              String playlistName = playlistProvider
-                                  .playlists
-                                  .keys
-                                  .elementAt(index);
-                              playlistProvider.addToPlaylist(
-                                playlistName,
-                                song,
-                              );
-                              Navigator.pop(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                playlistProvider.playlists.keys.elementAt(
-                                  index,
-                                ),
-                              ),
-                            ),
+                    if (playlistProvider.playlists.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: Text(
+                            "No playlists yet. Create your first playlist!",
+                            style: TextStyle(color: Colors.grey),
+                            textAlign: TextAlign.center,
                           ),
                         ),
+                      )
+                    else
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: playlistProvider.playlists.keys.length,
+                          separatorBuilder: (context, index) => Divider(),
+                          itemBuilder: (context, index) {
+                            String playlistName = playlistProvider
+                                .playlists
+                                .keys
+                                .elementAt(index);
+                            return ListTile(
+                              title: Text(playlistName),
+                              subtitle: Text(
+                                "${playlistProvider.playlists[playlistName]?.length ?? 0} songs",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              onTap: () {
+                                playlistProvider.addToPlaylist(
+                                  playlistName,
+                                  song,
+                                  context,
+                                );
+                                Navigator.pop(context);
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Ditambahkan ke playlist: $playlistName",
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),

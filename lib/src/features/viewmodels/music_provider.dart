@@ -79,8 +79,11 @@ class MusicProvider extends ChangeNotifier {
       final file = await getAudioFile(videoId);
 
       if (await file.exists()) {
+        // Play local file if it exists
+        print("Playing local file for: $title");
         await audioPlayer.setFilePath(file.path);
       } else {
+        // Otherwise attempt to stream
         String? audioUrl = _audioStreamUrl[videoId];
 
         if (audioUrl == null) {
@@ -102,13 +105,16 @@ class MusicProvider extends ChangeNotifier {
           } catch (e) {
             if (e.toString().contains('Socket') ||
                 e.toString().contains('Connection')) {
-              throw Exception('No Internet');
+              throw Exception(
+                'No Internet Connection. Try downloading this song first.',
+              );
             }
             rethrow;
           }
         }
         await audioPlayer.setUrl(audioUrl);
       }
+
       await audioPlayer.seek(Duration.zero);
       bufferingAudio?.startPreBuffering(videoId);
       await audioPlayer.play();

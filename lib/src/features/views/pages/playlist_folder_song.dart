@@ -119,12 +119,12 @@ class PlaylistFolderSong extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 4),
-                                  // _buildDownloadStatus(
-                                  //   context,
-                                  //   downloadStatus,
-                                  //   videoId,
-                                  //   song['title'] ?? 'Tidak Ada',
-                                  // ),
+                                  _buildDownloadStatus(
+                                    context,
+                                    downloadStatus,
+                                    videoId,
+                                    song['title'] ?? 'Tidak Ada',
+                                  ),
                                 ],
                               ),
                             ),
@@ -146,5 +146,48 @@ class PlaylistFolderSong extends StatelessWidget {
                 },
               ),
     );
+  }
+
+  Widget _buildDownloadStatus(
+    BuildContext context,
+    bool? status,
+    String videoId,
+    String title,
+  ) {
+    if (status == true) {
+      return Row(
+        children: [
+          Icon(Icons.check_circle, size: 14, color: Colors.green),
+          SizedBox(width: 4),
+          Text(
+            "Terdownload",
+            style: TextStyle(fontSize: 12, color: Colors.green),
+          ),
+        ],
+      );
+    } else if (status == false) {
+      return Row(
+        children: [
+          SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          SizedBox(width: 4),
+          Text("Sedang mendownload...", style: TextStyle(fontSize: 12)),
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          Icon(Icons.cloud_download, size: 14, color: Colors.orange),
+          SizedBox(width: 4),
+          Text(
+            "Menunggu download",
+            style: TextStyle(fontSize: 12, color: Colors.orange),
+          ),
+        ],
+      );
+    }
   }
 }

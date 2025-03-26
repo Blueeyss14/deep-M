@@ -89,8 +89,8 @@ class _HomePageState extends State<HomePage>
             child: ClipRect(
               child: BackdropFilter(
                 filter: ImageFilter.blur(
-                  sigmaX: ModalRoute.of(context)?.isCurrent == false ? 2 : 0,
-                  sigmaY: ModalRoute.of(context)?.isCurrent == false ? 2 : 0,
+                  sigmaX: ModalRoute.of(context)?.isCurrent == false ? 8 : 0,
+                  sigmaY: ModalRoute.of(context)?.isCurrent == false ? 8 : 0,
                 ),
                 child: AnimatedContainer(
                   height:

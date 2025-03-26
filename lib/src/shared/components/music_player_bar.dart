@@ -32,7 +32,7 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
           child: ClipRect(
             clipBehavior: Clip.antiAlias,
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 12),
+              filter: ImageFilter.blur(sigmaX: 15, sigmaY: 10),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(

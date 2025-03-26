@@ -19,7 +19,12 @@ class _BottomBarState extends State<BottomBar> {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.black.withAlpha(10), Colors.black.withAlpha(1000)],
+          colors: [
+            Colors.black.withAlpha(10),
+            Colors.black.withAlpha(1000),
+
+            Colors.black.withAlpha(1000),
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),

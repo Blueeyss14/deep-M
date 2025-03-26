@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/views/components/bottom_bar.dart';
-import 'package:deep_m/src/features/views/components/music_player_bar.dart';
+import 'package:deep_m/src/shared/components/music_player_bar.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
 import 'package:deep_m/src/features/views/pages/song_home_page.dart';

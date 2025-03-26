@@ -30,10 +30,14 @@ class _HomePageState extends State<HomePage>
     final audioPlayer = Provider.of<MusicProvider>(context);
     super.build(context);
     return Stack(
+      fit: StackFit.expand,
       children: [
+        Image.asset("images/nero-deep-M.png", fit: BoxFit.cover),
         Scaffold(
+          backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             elevation: 0,
             surfaceTintColor: Colors.transparent,
             title: Text("App Name"),

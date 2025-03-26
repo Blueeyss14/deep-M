@@ -17,8 +17,10 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final searchProvider = Provider.of<SearchSongProvider>(context);
+    final musicProvider = Provider.of<MusicProvider>(context, listen: false);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -45,68 +47,70 @@ class _SearchPageState extends State<SearchPage> {
 
                           final result = searchProvider.searchResult[index];
 
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(3),
-                                  child: CachedNetworkImage(
-                                    imageUrl: result['thumbnail']!,
-                                    width: 48,
-                                    height: 48,
-                                    fit: BoxFit.cover,
+                          return GestureDetector(
+                            onTap: () {
+                              musicProvider.playAudio(
+                                context,
+                                result['videoId'] ?? '',
+                                result['title'] ?? 'Tidak Ada',
+                                result['thumbnail'] ?? '',
+                                result['channel'] ?? 'Tidak Ada',
+                                result['description'] ?? 'Tidak Ada',
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              color: Colors.transparent,
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(3),
+                                    child: CachedNetworkImage(
+                                      imageUrl: result['thumbnail']!,
+                                      width: 48,
+                                      height: 48,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
+                                  const SizedBox(width: 12),
 
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        result['title'] ?? 'Tidak Ada',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          result['title'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
+                                            color: const Color(0xFFF1F1F1),
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        result['channel'] ?? 'Tidak Ada',
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ],
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          result['channel'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: const Color(0xFFDADADA),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    final musicProvider =
-                                        Provider.of<MusicProvider>(
-                                          context,
-                                          listen: false,
-                                        );
-
-                                    musicProvider.playAudio(
-                                      context,
-                                      result['videoId'] ?? '',
-                                      result['title'] ?? 'Tidak Ada',
-                                      result['thumbnail'] ?? '',
-                                      result['channel'] ?? 'Tidak Ada',
-                                      result['description'] ?? 'Tidak Ada',
-                                    );
-                                  },
-                                  icon: Icon(Icons.play_arrow),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      addPlaylistBottomSheet(context, result);
-                                    });
-                                  },
-                                  child: Icon(Icons.more_vert),
-                                ),
-                              ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        addPlaylistBottomSheet(context, result);
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.more_vert,
+                                      color: const Color(0xFFF1F1F1),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },

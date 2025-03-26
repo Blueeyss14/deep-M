@@ -47,6 +47,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
     final playlistProvider = Provider.of<PlaylistProvider>(context);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body:
           playlistProvider.playlists.isEmpty

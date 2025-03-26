@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/shared/current_song_text.dart';
-import 'package:deep_m/src/shared/music_slider.dart';
+import 'package:deep_m/src/shared/components/music_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,4 +1,5 @@
 import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
+import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,10 +37,23 @@ class _BottomBarState extends State<BottomBar> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(bottomNavItem.bottomBarItem[i].icon.icon, size: 25),
+                    Icon(
+                      bottomNavItem.bottomBarItem[i].icon.icon,
+                      size: 25,
+                      color:
+                          bottomNavItem.currentIndex == i
+                              ? CustomColor.white1
+                              : CustomColor.white3,
+                    ),
                     Text(
                       bottomNavItem.bottomBarItem[i].title,
-                      style: TextStyle(fontSize: 13),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color:
+                            bottomNavItem.currentIndex == i
+                                ? CustomColor.white1
+                                : CustomColor.white3,
+                      ),
                     ),
                   ],
                 ),

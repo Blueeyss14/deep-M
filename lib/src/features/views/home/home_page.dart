@@ -36,12 +36,7 @@ class _HomePageState extends State<HomePage>
         Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            surfaceTintColor: Colors.transparent,
-            title: Text("App Name"),
-          ),
+
           body: Stack(
             children: [
               Column(

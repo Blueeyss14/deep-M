@@ -1,4 +1,5 @@
 import 'package:deep_m/src/features/viewmodels/search_song_provider.dart';
+import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,16 +19,16 @@ class _TextfieldSearchState extends State<TextfieldSearch> {
         maxHeight: MediaQuery.of(context).size.height / 10,
       ),
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.black),
+        border: Border.all(width: 1, color: Colors.transparent),
         borderRadius: BorderRadius.circular(10),
-        color: Colors.transparent,
+        color: CustomColor.white2,
       ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: searchProvider.searchController,
-              cursorColor: Colors.black,
+              cursorColor: CustomColor.white1,
               autocorrect: false,
               decoration: InputDecoration(
                 hintText: "Search song here...",

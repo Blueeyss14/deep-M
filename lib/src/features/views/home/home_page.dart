@@ -74,6 +74,8 @@ class _HomePageState extends State<HomePage>
                     if (ModalRoute.of(context)?.isCurrent == true)
                       MusicPlayerBar(),
 
+                  const SizedBox(height: 5),
+
                   ///BOTTOM BAR
                   BottomBar(),
                 ],

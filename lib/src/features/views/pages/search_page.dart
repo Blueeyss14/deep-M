@@ -42,7 +42,7 @@ class _SearchPageState extends State<SearchPage> {
                       fontSize: 32,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   TextfieldSearch(),
                   const SizedBox(height: 20),
                 ],

@@ -20,11 +20,12 @@ class _TextfieldSearchState extends State<TextfieldSearch> {
       ),
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: Colors.transparent),
-        borderRadius: BorderRadius.circular(10),
-        color: CustomColor.white2,
+        borderRadius: BorderRadius.circular(6),
+        color: CustomColor.white1,
       ),
       child: Row(
         children: [
+          const SizedBox(width: 5),
           Expanded(
             child: TextField(
               controller: searchProvider.searchController,

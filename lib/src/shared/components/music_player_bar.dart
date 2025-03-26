@@ -77,11 +77,10 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                               ? position.inSeconds /
                                                   duration.inSeconds
                                               : 0,
-                                      backgroundColor: Colors.grey[300],
-                                      valueColor:
-                                          const AlwaysStoppedAnimation<Color>(
-                                            Colors.red,
-                                          ),
+                                      backgroundColor: CustomColor.white3,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        CustomColor.white1,
+                                      ),
                                       minHeight: 2,
                                     ),
                                   ),
@@ -92,6 +91,7 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                     ),
                                     child: Row(
                                       children: [
+                                        SizedBox(width: 3),
                                         if (audioPlayer
                                             .currentThumbnail
                                             .isEmpty)
@@ -128,7 +128,7 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                               ),
                                               Text(
                                                 audioPlayer.isPlayingOffline
-                                                    ? "🎵 ${audioPlayer.currentChannel} (offline)"
+                                                    ? "${audioPlayer.currentChannel} (offline)"
                                                     : audioPlayer
                                                         .currentChannel,
                                                 style: TextStyle(

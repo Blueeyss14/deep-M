@@ -8,4 +8,6 @@ class CustomColor {
   static Color musicBar1 = Color(0xFF636363);
   static Color musicBar2 = Color(0xFF344452);
   static Color musicBar3 = Color(0xFF314352);
+
+  static Color blackSheet = Color(0xFF12161A);
 }

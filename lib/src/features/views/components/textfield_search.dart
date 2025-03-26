@@ -29,7 +29,7 @@ class _TextfieldSearchState extends State<TextfieldSearch> {
           Expanded(
             child: TextField(
               controller: searchProvider.searchController,
-              cursorColor: CustomColor.white1,
+              cursorColor: Colors.black,
               autocorrect: false,
               decoration: InputDecoration(
                 hintText: "Search song here...",

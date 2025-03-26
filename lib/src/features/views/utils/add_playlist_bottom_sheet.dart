@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:deep_m/src/features/views/dialog/create_playlist_dialog.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
 
 void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
-  final TextEditingController playlistNameController = TextEditingController();
-
   showModalBottomSheet(
     useRootNavigator: false,
     backgroundColor: Colors.transparent,
@@ -26,16 +25,16 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height / 2 + 100,
         ),
-        decoration: BoxDecoration(color: const Color(0xFF12161A)),
+        decoration: BoxDecoration(color: CustomColor.blackSheet),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ///Dialog dragger yang putih putih itu
+            ///Dialog dragger yang putih putih itu apalah namanya
             Center(
               child: Container(
                 margin: const EdgeInsets.only(top: 12),
                 width: 30,
-                height: 3,
+                height: 4,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   color: CustomColor.white3,
@@ -94,78 +93,11 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        ///CREATE playlist DIALOGGGGGGGG
                         showDialog(
                           context: context,
                           builder:
-                              (context) => AlertDialog(
-                                title: Text('Create New Playlist'),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: TextField(
-                                        controller: playlistNameController,
-                                        decoration: InputDecoration(
-                                          labelText: 'Nama Playlist',
-                                          hintText: 'Contoh: Favorit Saya',
-                                          border: OutlineInputBorder(),
-                                        ),
-                                        autofocus: true,
-                                        textInputAction: TextInputAction.done,
-                                        onSubmitted: (value) {
-                                          if (value.trim().isNotEmpty) {
-                                            playlistProvider.addToPlaylist(
-                                              value.trim(),
-                                              song,
-                                              context,
-                                            );
-                                            Navigator.pop(
-                                              context,
-                                            ); // Close dialog
-                                            Navigator.pop(
-                                              context,
-                                            ); // Close sheet
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text("Batal"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            String playlistName =
-                                                playlistNameController.text
-                                                    .trim();
-                                            if (playlistName.isNotEmpty) {
-                                              playlistProvider.addToPlaylist(
-                                                playlistName,
-                                                song,
-                                                context,
-                                              );
-                                              Navigator.pop(
-                                                context,
-                                              ); // Close dialog
-                                              Navigator.pop(
-                                                context,
-                                              ); // Close bottom sheet
-                                            }
-                                          },
-                                          child: Text("Buat Playlist"),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              (context) => CreatePlaylistDialog(song: song),
                         );
                       },
                       child: Container(
@@ -219,7 +151,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: 3),
                             Expanded(
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
@@ -232,7 +164,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                       .elementAt(index);
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                      vertical: 5,
+                                      vertical: 8,
                                     ),
                                     child: GestureDetector(
                                       onTap: () {
@@ -256,56 +188,51 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                                               size: 30,
                                             ),
                                             const SizedBox(width: 15),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  playlistName,
-                                                  style: TextStyle(
-                                                    color: CustomColor.white2,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    playlistName,
+                                                    style: TextStyle(
+                                                      color: CustomColor.white2,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  "${playlistProvider.playlists[playlistName]?.length ?? 0} songs",
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: CustomColor.white3,
-                                                  ),
-                                                ),
-                                              ],
+
+                                                  /// handle song & songs if length > 1
+                                                  if (playlistProvider
+                                                          .playlists[playlistName]
+                                                          ?.length ==
+                                                      1)
+                                                    Text(
+                                                      "${playlistProvider.playlists[playlistName]?.length ?? 0} song",
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color:
+                                                            CustomColor.white3,
+                                                      ),
+                                                    )
+                                                  else
+                                                    Text(
+                                                      "${playlistProvider.playlists[playlistName]?.length ?? 0} songs",
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color:
+                                                            CustomColor.white3,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
                                   );
-                                  // ListTile(
-                                  //   minVerticalPadding: 0,
-                                  //   contentPadding: EdgeInsets.zero,
-                                  //   leading: Icon(
-                                  //     Icons.playlist_play,
-                                  //     color: CustomColor.white2,
-                                  //     size: 30,
-                                  //   ),
-                                  //   title: Text(
-                                  //     playlistName,
-                                  //     style: TextStyle(
-                                  //       color: CustomColor.white2,
-                                  //       fontWeight: FontWeight.bold,
-                                  //     ),
-                                  //   ),
-                                  //   subtitle: Text(
-                                  //     "${playlistProvider.playlists[playlistName]?.length ?? 0} songs",
-                                  //     style: TextStyle(
-                                  //       fontSize: 12,
-                                  //       color: CustomColor.white3,
-                                  //     ),
-                                  //   ),
-
-                                  // );
                                 },
                               ),
                             ),

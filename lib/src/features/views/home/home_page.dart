@@ -106,6 +106,18 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           ),
+
+        if (audioPlayer.isBuffering)
+          Center(
+            child: SizedBox(
+              height: 30,
+              width: 30,
+              child: CircularProgressIndicator(
+                color: CustomColor.white1,
+                strokeWidth: 3,
+              ),
+            ),
+          ),
       ],
     );
   }

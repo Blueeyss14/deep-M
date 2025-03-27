@@ -13,6 +13,8 @@ class DownloadSongProvider extends ChangeNotifier {
   final YoutubeExplode youtube = YoutubeExplode();
   bool _isMusicProviderInitialized = false;
 
+  String progress = '';
+
   static const String _downloadStatusFileName = 'download_status.json';
 
   void initMusicProvider(BuildContext context) {
@@ -134,13 +136,13 @@ class DownloadSongProvider extends ChangeNotifier {
         fileStream.add(data);
 
         // Display progress percentage
-        final progress = (count / len * 100).toStringAsFixed(0);
+        progress = (count / len * 100).toStringAsFixed(0);
         if (int.parse(progress) % 10 == 0) {
           // log every 10%
           print("Download progress: $progress% for $title");
         }
+        if (int.parse(progress) >= 100) downloadStatus[videoId] = false;
 
-        downloadStatus[videoId] = false;
         notifyListeners();
       }
 

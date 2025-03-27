@@ -144,10 +144,10 @@ class MusicProvider extends ChangeNotifier {
     await playAudio(
       context,
       nextSong['videoId'] ?? '',
-      nextSong['title'] ?? 'Tidak Ada',
+      nextSong['title'] ?? '',
       nextSong['thumbnail'] ?? '',
-      nextSong['channel'] ?? 'Tidak Ada',
-      nextSong['description'] ?? 'Tidak Ada',
+      nextSong['channel'] ?? '',
+      nextSong['description'] ?? '',
       playlistName: currentPlaylistName,
       playlistIndex: nextIndex,
     );
@@ -170,10 +170,10 @@ class MusicProvider extends ChangeNotifier {
     await playAudio(
       context,
       prevSong['videoId'] ?? '',
-      prevSong['title'] ?? 'Tidak Ada',
+      prevSong['title'] ?? '',
       prevSong['thumbnail'] ?? '',
-      prevSong['channel'] ?? 'Tidak Ada',
-      prevSong['description'] ?? 'Tidak Ada',
+      prevSong['channel'] ?? '',
+      prevSong['description'] ?? '',
       playlistName: currentPlaylistName,
       playlistIndex: prevIndex,
     );
@@ -206,10 +206,10 @@ class MusicProvider extends ChangeNotifier {
     await playAudio(
       context,
       song['videoId'] ?? '',
-      song['title'] ?? 'Tidak Ada',
+      song['title'] ?? '',
       song['thumbnail'] ?? '',
-      song['channel'] ?? 'Tidak Ada',
-      song['description'] ?? 'Tidak Ada',
+      song['channel'] ?? '',
+      song['description'] ?? '',
       playlistName: playlistName,
       playlistIndex: songIndex,
     );
@@ -317,7 +317,7 @@ class MusicProvider extends ChangeNotifier {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Gagal memutar audio: ${e.toString()}'),
+                content: Text('Failed to play: ${e.toString()}'),
                 duration: Duration(seconds: 3),
               ),
             );
@@ -336,7 +336,6 @@ class MusicProvider extends ChangeNotifier {
 
     if (audioUrl == null) {
       try {
-        print("Mencoba stream dari YouTube untuk: $videoId");
         var manifest = await youtube.videos.streamsClient.getManifest(videoId);
         var audioStreams = manifest.audioOnly.toList();
         audioStreams.sort((a, b) => b.bitrate.compareTo(a.bitrate));
@@ -344,18 +343,16 @@ class MusicProvider extends ChangeNotifier {
         var audioStream = audioStreams.isNotEmpty ? audioStreams[0] : null;
 
         if (audioStream == null) {
-          throw Exception('Audio tidak ditemukan');
+          throw Exception('No Audio');
         }
 
         audioUrl = audioStream.url.toString();
         _audioStreamUrl[videoId] = audioUrl;
-        print("Streaming dari: ${audioStream.bitrate.kiloBitsPerSecond} kbps");
+        print("${audioStream.bitrate.kiloBitsPerSecond} kbps");
       } catch (e) {
         if (e.toString().contains('Socket') ||
             e.toString().contains('Connection')) {
-          throw Exception(
-            'Tidak ada koneksi internet. Download lagu ini dulu.',
-          );
+          throw Exception('No Internet Connection');
         }
         rethrow;
       }

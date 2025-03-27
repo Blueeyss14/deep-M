@@ -61,128 +61,127 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                             final duration =
                                 durationSnapshot.data ?? Duration.zero;
 
-                            if (audioPlayer.isBuffering) {
-                              return const CircularProgressIndicator();
-                            } else {
-                              return Column(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                    ),
-                                    alignment: Alignment.topLeft,
-                                    child: LinearProgressIndicator(
-                                      value:
-                                          duration.inSeconds > 0
-                                              ? position.inSeconds /
-                                                  duration.inSeconds
-                                              : 0,
-                                      backgroundColor: CustomColor.white3,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        CustomColor.white1,
-                                      ),
-                                      minHeight: 2,
-                                    ),
+                            return Column(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 8,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 5,
+                                  alignment: Alignment.topLeft,
+                                  child: LinearProgressIndicator(
+                                    value:
+                                        duration.inSeconds > 0
+                                            ? position.inSeconds /
+                                                duration.inSeconds
+                                            : 0,
+                                    backgroundColor: CustomColor.white3,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      CustomColor.white1,
                                     ),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(width: 3),
-                                        if (audioPlayer
-                                            .currentThumbnail
-                                            .isEmpty)
-                                          const Icon(Icons.music_note, size: 40)
-                                        else
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              3,
-                                            ),
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  audioPlayer.currentThumbnail,
-                                              width: 40,
-                                              height: 40,
-                                              fit: BoxFit.cover,
-                                            ),
+                                    minHeight: 2,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 5,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 3),
+                                      if (audioPlayer.currentThumbnail.isEmpty)
+                                        const Icon(Icons.music_note, size: 40)
+                                      else
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            3,
                                           ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                audioPlayer.currentTitle,
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: CustomColor.white1,
-                                                ),
-
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                audioPlayer.currentChannel,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: CustomColor.white2,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                audioPlayer.currentThumbnail,
+                                            width: 40,
+                                            height: 40,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
-
-                                        // Control buttons
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            SizedBox(width: 15),
-                                            _buildRepeatModeButton(audioPlayer),
-
-                                            if (audioPlayer.isPlaying)
-                                              IconButton(
-                                                icon: Icon(Icons.pause),
-                                                onPressed: () {
-                                                  audioPlayer.pauseAudio();
-                                                },
-                                                tooltip: 'Pause',
-                                                padding: EdgeInsets.zero,
-                                                constraints: BoxConstraints(
-                                                  minWidth: 40,
-                                                  minHeight: 40,
-                                                ),
-                                                color: CustomColor.white1,
-                                              )
-                                            else
-                                              IconButton(
-                                                icon: Icon(Icons.play_arrow),
-                                                onPressed: () {
-                                                  audioPlayer.audioPlayer
-                                                      .play();
-                                                },
-                                                tooltip: 'Play',
-                                                padding: EdgeInsets.zero,
-                                                constraints: BoxConstraints(
-                                                  minWidth: 40,
-                                                  minHeight: 40,
-                                                ),
+                                            DefaultTextStyle(
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
                                                 color: CustomColor.white1,
                                               ),
+                                              child: Text(
+                                                audioPlayer.currentTitle,
+
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 1),
+                                            DefaultTextStyle(
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: CustomColor.white2,
+                                              ),
+                                              child: Text(
+                                                audioPlayer.currentChannel,
+
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+
+                                      // Control buttons
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(width: 15),
+                                          _buildRepeatModeButton(audioPlayer),
+
+                                          if (audioPlayer.isPlaying)
+                                            IconButton(
+                                              icon: Icon(Icons.pause),
+                                              onPressed: () {
+                                                audioPlayer.pauseAudio();
+                                              },
+                                              tooltip: 'Pause',
+                                              padding: EdgeInsets.zero,
+                                              constraints: BoxConstraints(
+                                                minWidth: 40,
+                                                minHeight: 40,
+                                              ),
+                                              color: CustomColor.white1,
+                                            )
+                                          else
+                                            IconButton(
+                                              icon: Icon(Icons.play_arrow),
+                                              onPressed: () {
+                                                audioPlayer.audioPlayer.play();
+                                              },
+                                              tooltip: 'Play',
+                                              padding: EdgeInsets.zero,
+                                              constraints: BoxConstraints(
+                                                minWidth: 40,
+                                                minHeight: 40,
+                                              ),
+                                              color: CustomColor.white1,
+                                            ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              );
-                            }
+                                ),
+                              ],
+                            );
                           },
                         );
                       },

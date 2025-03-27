@@ -219,7 +219,7 @@ class PlaylistProvider extends ChangeNotifier {
           print("Error: $parseError");
         }
       } else {
-        print("No file playlist");
+        print("No playlist");
       }
     } catch (e) {
       print('Error: $e');
@@ -233,12 +233,5 @@ class PlaylistProvider extends ChangeNotifier {
     notifyListeners();
 
     await savePlaylist();
-
-    // if (mounted) {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => _buildPlaylistPage()),
-    //   );
-    // }
   }
 }

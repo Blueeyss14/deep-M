@@ -39,7 +39,6 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
     playlistProvider.initDownloadSongProvider(context);
     await downloadSongProvider.loadDownloadStatus();
-
     await playlistProvider.downloadAllPendingSongs(context);
 
     _isInitialized = true;
@@ -60,7 +59,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
             width: double.infinity,
             child: SafeArea(
               child: Text(
-                "Search",
+                "Playlist",
                 style: TextStyle(
                   color: CustomColor.white1,
                   fontWeight: FontWeight.bold,
@@ -69,37 +68,33 @@ class _PlaylistPageState extends State<PlaylistPage> {
               ),
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.zero,
-              child:
-                  playlistProvider.playlists.isEmpty
-                      ? _buildEmptyPlaylistView()
-                      : _buildPlaylistGrid(playlistProvider),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildEmptyPlaylistView() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.playlist_add, size: 80, color: Colors.grey),
-          SizedBox(height: 16),
-          Text(
-            "Belum ada playlist",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 8),
-          Text(
-            "Tambahkan lagu ke playlist dari halaman pencarian",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey[600]),
-          ),
+          if (playlistProvider.playlists.isEmpty)
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "GET OUT 🗣🗣",
+                    style: TextStyle(fontSize: 16, color: CustomColor.white2),
+                  ),
+                  const SizedBox(height: 5),
+
+                  Text(
+                    "No Playlist Created",
+                    style: TextStyle(fontSize: 16, color: CustomColor.white2),
+                  ),
+                  const SizedBox(height: 60),
+                ],
+              ),
+            )
+          else
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.zero,
+                child: _buildPlaylistGrid(playlistProvider),
+              ),
+            ),
         ],
       ),
     );
@@ -109,104 +104,101 @@ class _PlaylistPageState extends State<PlaylistPage> {
     final List<String> playlistNames = playlistProvider.playlists.keys.toList();
     final int playlistCount = playlistNames.length;
 
-    final int rowCount = (playlistCount / 2).ceil();
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
-        children: List.generate(rowCount, (rowIndex) {
-          final int itemsInThisRow =
-              rowIndex == rowCount - 1 && playlistCount % 2 != 0 ? 1 : 2;
-
-          return Row(
-            children: List.generate(itemsInThisRow, (colIndex) {
-              final int playlistIndex = rowIndex * 2 + colIndex;
-              final String playlistName = playlistNames[playlistIndex];
-              final int songCount =
-                  playlistProvider.playlists[playlistName]!.length;
-
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => PlaylistFolderSong(
-                                playlistName: playlistName,
-                              ),
-                        ),
-                      );
-                    });
-                  },
-                  child: ClipRect(
-                    clipBehavior: Clip.antiAlias,
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 8),
-
-                      child: Container(
-                        padding: const EdgeInsets.all(15),
-                        margin: const EdgeInsets.all(10),
-                        height: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            width: 0.5,
-                            color: CustomColor.white2.withAlpha(100),
-                          ),
-
-                          gradient: LinearGradient(
-                            colors: [
-                              CustomColor.musicBar1.withAlpha(50),
-                              CustomColor.musicBar2.withAlpha(70),
-                              CustomColor.musicBar3.withAlpha(80),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(height: 8),
-                            Text(
-                              playlistName,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: CustomColor.white1,
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            if (songCount == 1)
-                              Text(
-                                "$songCount song",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: CustomColor.white2,
-                                ),
-                              )
-                            else
-                              Text(
-                                "$songCount songs",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: CustomColor.white2,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+        children: [
+          for (int i = 0; i < playlistCount; i += 2)
+            Row(
+              children: [
+                Expanded(
+                  child: _buildPlaylistItem(playlistNames[i], playlistProvider),
                 ),
-              );
-            }),
+                if (i + 1 < playlistCount)
+                  Expanded(
+                    child: _buildPlaylistItem(
+                      playlistNames[i + 1],
+                      playlistProvider,
+                    ),
+                  )
+                else
+                  Expanded(child: SizedBox()),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlaylistItem(
+    String playlistName,
+    PlaylistProvider playlistProvider,
+  ) {
+    final int songCount = playlistProvider.playlists[playlistName]!.length;
+
+    return GestureDetector(
+      onLongPress: () {
+        setState(() {
+          playlistProvider.deletePlaylist(playlistName);
+        });
+      },
+      onTap: () {
+        setState(() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => PlaylistFolderSong(playlistName: playlistName),
+            ),
           );
-        }),
+        });
+      },
+      child: ClipRect(
+        clipBehavior: Clip.antiAlias,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 8),
+          child: Container(
+            padding: const EdgeInsets.all(15),
+            margin: EdgeInsets.all(10),
+            height: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                width: 0.5,
+                color: CustomColor.white2.withAlpha(100),
+              ),
+              gradient: LinearGradient(
+                colors: [
+                  CustomColor.musicBar1.withAlpha(50),
+                  CustomColor.musicBar2.withAlpha(70),
+                  CustomColor.musicBar3.withAlpha(80),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  playlistName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: CustomColor.white1,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "$songCount song${songCount > 1 ? 's' : ''}",
+                  style: TextStyle(fontSize: 12, color: CustomColor.white2),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

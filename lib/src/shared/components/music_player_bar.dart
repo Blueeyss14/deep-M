@@ -127,10 +127,7 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               Text(
-                                                audioPlayer.isPlayingOffline
-                                                    ? "${audioPlayer.currentChannel} (offline)"
-                                                    : audioPlayer
-                                                        .currentChannel,
+                                                audioPlayer.currentChannel,
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: CustomColor.white2,
@@ -149,25 +146,6 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                             SizedBox(width: 15),
                                             _buildRepeatModeButton(audioPlayer),
 
-                                            // if (audioPlayer
-                                            //     .isPlayingFromPlaylist)
-                                            //   IconButton(
-                                            //     icon: Icon(
-                                            //       Icons.skip_previous,
-                                            //       size: 20,
-                                            //     ),
-                                            //     onPressed: () {
-                                            //       audioPlayer.playPreviousSong(
-                                            //         context,
-                                            //       );
-                                            //     },
-                                            //     tooltip: 'Lagu sebelumnya',
-                                            //     padding: EdgeInsets.zero,
-                                            //     constraints: BoxConstraints(
-                                            //       minWidth: 32,
-                                            //       minHeight: 32,
-                                            //     ),
-                                            //   ),
                                             if (audioPlayer.isPlaying)
                                               IconButton(
                                                 icon: Icon(Icons.pause),
@@ -197,26 +175,6 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
                                                 ),
                                                 color: CustomColor.white1,
                                               ),
-
-                                            // if (audioPlayer
-                                            //     .isPlayingFromPlaylist)
-                                            //   IconButton(
-                                            //     icon: Icon(
-                                            //       Icons.skip_next,
-                                            //       size: 20,
-                                            //     ),
-                                            //     onPressed: () {
-                                            //       audioPlayer.playNextSong(
-                                            //         context,
-                                            //       );
-                                            //     },
-                                            //     tooltip: 'Lagu berikutnya',
-                                            //     padding: EdgeInsets.zero,
-                                            //     constraints: BoxConstraints(
-                                            //       minWidth: 32,
-                                            //       minHeight: 32,
-                                            //     ),
-                                            //   ),
                                           ],
                                         ),
                                       ],
@@ -250,21 +208,18 @@ class _MusicPlayerBarState extends State<MusicPlayerBar> {
     switch (audioPlayer.repeatMode) {
       case RepeatMode.none:
         iconData = Icons.repeat;
-        iconColor = Colors.grey;
-        tooltip = 'Sekali saja';
+        iconColor = CustomColor.white3;
+        tooltip = 'Play once';
         break;
       case RepeatMode.playlist:
         iconData = Icons.repeat;
-        iconColor = isPlaylist ? Colors.black : Colors.grey[400]!;
-        tooltip =
-            isPlaylist
-                ? 'Putar semua lagu di playlist'
-                : 'Mode tidak tersedia (tidak dalam playlist)';
+        iconColor = isPlaylist ? CustomColor.white1 : CustomColor.white3;
+        tooltip = isPlaylist ? 'Play all song' : '';
         break;
       case RepeatMode.single:
         iconData = Icons.repeat_one;
-        iconColor = Colors.black;
-        tooltip = 'Ulang lagu ini';
+        iconColor = CustomColor.white1;
+        tooltip = 'Repeat';
         break;
     }
 

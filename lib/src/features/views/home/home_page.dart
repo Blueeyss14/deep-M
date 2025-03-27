@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        CustomColor.musicBar1.withAlpha(300),
+                        CustomColor.musicBar1.withAlpha(10),
                         CustomColor.musicBar2.withAlpha(100),
                       ],
                       begin: Alignment.topCenter,

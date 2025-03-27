@@ -142,7 +142,12 @@ class _SearchPageState extends State<SearchPage> {
                           },
                         ),
                       )
-                      : Center(child: Text('Tidak Ada Hasil')),
+                      : Center(
+                        child: Text(
+                          'Search your Song',
+                          style: TextStyle(color: CustomColor.white2),
+                        ),
+                      ),
             ),
           ],
         ),

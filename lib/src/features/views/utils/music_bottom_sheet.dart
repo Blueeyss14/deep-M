@@ -9,6 +9,7 @@ void musicBottomSheet(BuildContext context) {
   final musicProvider = Provider.of<MusicProvider>(context, listen: false);
 
   showModalBottomSheet(
+    barrierColor: Colors.transparent,
     clipBehavior: Clip.antiAlias,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(

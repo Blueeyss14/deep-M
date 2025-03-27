@@ -227,4 +227,18 @@ class PlaylistProvider extends ChangeNotifier {
       _isLoadingPlaylists = false;
     }
   }
+
+  Future<void> deletePlaylist(String playlistName) async {
+    playlists.remove(playlistName);
+    notifyListeners();
+
+    await savePlaylist();
+
+    // if (mounted) {
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => _buildPlaylistPage()),
+    //   );
+    // }
+  }
 }

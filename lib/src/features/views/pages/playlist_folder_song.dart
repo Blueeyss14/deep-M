@@ -67,7 +67,7 @@ class PlaylistFolderSong extends StatelessWidget {
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 8),
 
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
+                            padding: EdgeInsets.only(bottom: 8),
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               margin: const EdgeInsets.symmetric(
@@ -135,11 +135,6 @@ class PlaylistFolderSong extends StatelessWidget {
                                         song,
                                         playlistProvider,
                                       );
-
-                                      // playlistProvider.removeSongFromPlaylist(
-                                      //   playlistName,
-                                      //   song,
-                                      // );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 5),

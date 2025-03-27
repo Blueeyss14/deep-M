@@ -9,6 +9,7 @@ void deletePlaylistDialog(
   PlaylistProvider playlistProvider,
 ) {
   showDialog(
+    barrierColor: const Color(0x5F000000),
     context: context,
     builder:
         (context) => AlertDialog(

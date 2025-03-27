@@ -7,6 +7,7 @@ import 'package:deep_m/src/shared/components/music_player_bar.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
 import 'package:deep_m/src/features/views/pages/search_page.dart';
 import 'package:deep_m/src/features/views/pages/song_home_page.dart';
+import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -88,20 +89,19 @@ class _HomePageState extends State<HomePage>
           Center(
             child: ClipRect(
               child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: ModalRoute.of(context)?.isCurrent == false ? 8 : 0,
-                  sigmaY: ModalRoute.of(context)?.isCurrent == false ? 8 : 0,
-                ),
-                child: AnimatedContainer(
-                  height:
-                      ModalRoute.of(context)?.isCurrent == false
-                          ? MediaQuery.of(context).size.height
-                          : 0,
-                  width:
-                      ModalRoute.of(context)?.isCurrent == false
-                          ? MediaQuery.of(context).size.width
-                          : 0,
-                  duration: Duration(milliseconds: 100),
+                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        CustomColor.musicBar1.withAlpha(300),
+                        CustomColor.musicBar2.withAlpha(100),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
                 ),
               ),
             ),

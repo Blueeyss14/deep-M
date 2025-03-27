@@ -7,6 +7,7 @@ import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
 
 void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
   showModalBottomSheet(
+    barrierColor: Colors.transparent,
     useRootNavigator: false,
     backgroundColor: Colors.transparent,
     clipBehavior: Clip.antiAlias,

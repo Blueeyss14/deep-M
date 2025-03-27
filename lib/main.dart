@@ -21,21 +21,7 @@ class MyApp extends StatelessWidget {
         }
         FocusScope.of(context).unfocus();
       },
-      child: MaterialApp(
-        // title: 'DeepM - Music Player',
-        // theme: ThemeData(
-        //   primarySwatch: Colors.amber,
-        //   visualDensity: VisualDensity.adaptivePlatformDensity,
-        //   // useMaterial3: true,
-        //   appBarTheme: AppBarTheme(
-        //     backgroundColor: Colors.amber,
-        //     foregroundColor: Colors.black,
-        //     centerTitle: true,
-        //   ),
-        // ),
-        home: HomePage(),
-        debugShowCheckedModeBanner: false,
-      ),
+      child: MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false),
     );
   }
 }

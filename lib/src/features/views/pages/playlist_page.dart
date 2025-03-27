@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:deep_m/src/features/viewmodels/download_song_provider.dart';
 import 'package:deep_m/src/features/views/pages/playlist_folder_song.dart';
+import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
@@ -49,10 +52,34 @@ class _PlaylistPageState extends State<PlaylistPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
-      body:
-          playlistProvider.playlists.isEmpty
-              ? _buildEmptyPlaylistView()
-              : _buildPlaylistGrid(playlistProvider),
+      body: Column(
+        children: [
+          const SizedBox(height: 20),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            width: double.infinity,
+            child: SafeArea(
+              child: Text(
+                "Search",
+                style: TextStyle(
+                  color: CustomColor.white1,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.zero,
+              child:
+                  playlistProvider.playlists.isEmpty
+                      ? _buildEmptyPlaylistView()
+                      : _buildPlaylistGrid(playlistProvider),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -86,85 +113,100 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        child: Column(
-          children: List.generate(rowCount, (rowIndex) {
-            final int itemsInThisRow =
-                rowIndex == rowCount - 1 && playlistCount % 2 != 0 ? 1 : 2;
+      child: Column(
+        children: List.generate(rowCount, (rowIndex) {
+          final int itemsInThisRow =
+              rowIndex == rowCount - 1 && playlistCount % 2 != 0 ? 1 : 2;
 
-            return Row(
-              children: List.generate(itemsInThisRow, (colIndex) {
-                final int playlistIndex = rowIndex * 2 + colIndex;
-                final String playlistName = playlistNames[playlistIndex];
-                final int songCount =
-                    playlistProvider.playlists[playlistName]!.length;
+          return Row(
+            children: List.generate(itemsInThisRow, (colIndex) {
+              final int playlistIndex = rowIndex * 2 + colIndex;
+              final String playlistName = playlistNames[playlistIndex];
+              final int songCount =
+                  playlistProvider.playlists[playlistName]!.length;
 
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => PlaylistFolderSong(
-                                  playlistName: playlistName,
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => PlaylistFolderSong(
+                                playlistName: playlistName,
+                              ),
+                        ),
+                      );
+                    });
+                  },
+                  child: ClipRect(
+                    clipBehavior: Clip.antiAlias,
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 8),
+
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        margin: const EdgeInsets.all(10),
+                        height: 120,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            width: 0.5,
+                            color: CustomColor.white2.withAlpha(100),
+                          ),
+
+                          gradient: LinearGradient(
+                            colors: [
+                              CustomColor.musicBar1.withAlpha(50),
+                              CustomColor.musicBar2.withAlpha(70),
+                              CustomColor.musicBar3.withAlpha(80),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 8),
+                            Text(
+                              playlistName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: CustomColor.white1,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            if (songCount == 1)
+                              Text(
+                                "$songCount song",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: CustomColor.white2,
                                 ),
-                          ),
-                        );
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.amber.shade100,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.music_note,
-                            size: 40,
-                            color: Colors.amber.shade700,
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            playlistName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "$songCount lagu",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
+                              )
+                            else
+                              Text(
+                                "$songCount songs",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: CustomColor.white2,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                );
-              }),
-            );
-          }),
-        ),
+                ),
+              );
+            }),
+          );
+        }),
       ),
     );
   }

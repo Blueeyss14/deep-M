@@ -144,7 +144,7 @@ class _SearchPageState extends State<SearchPage> {
                       )
                       : Center(
                         child: Text(
-                          'Search your Song',
+                          'Search Song',
                           style: TextStyle(color: CustomColor.white2),
                         ),
                       ),

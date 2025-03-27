@@ -158,6 +158,28 @@ class PlaylistFolderSong extends StatelessWidget {
                     },
                   ),
         ),
+
+        if (ModalRoute.of(context)?.isCurrent == false)
+          Center(
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        CustomColor.musicBar1.withAlpha(10),
+                        CustomColor.musicBar2.withAlpha(100),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

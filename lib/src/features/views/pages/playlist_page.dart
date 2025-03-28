@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:deep_m/src/features/viewmodels/download_song_provider.dart';
+import 'package:deep_m/src/features/views/dialog/delete_playlist_dialog.dart';
 import 'package:deep_m/src/features/views/pages/playlist_folder_song.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
           else
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(bottom: 200),
                 child: _buildPlaylistGrid(playlistProvider),
               ),
             ),
@@ -105,7 +106,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
     final int playlistCount = playlistNames.length;
 
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       child: Column(
         children: [
           for (int i = 0; i < playlistCount; i += 2)
@@ -138,9 +139,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
     return GestureDetector(
       onLongPress: () {
-        setState(() {
-          playlistProvider.deletePlaylist(playlistName);
-        });
+        deletePlaylistDialog(context, playlistName, playlistProvider);
       },
       onTap: () {
         setState(() {

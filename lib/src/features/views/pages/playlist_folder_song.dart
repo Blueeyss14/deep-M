@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/download_song_provider.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
-import 'package:deep_m/src/features/views/dialog/delete_playlist_dialog.dart';
+import 'package:deep_m/src/features/views/dialog/delete_song_dialog.dart';
 import 'package:deep_m/src/shared/components/music_player_bar.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
@@ -65,9 +65,6 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
                       final videoId = song['videoId'] ?? '';
                       final downloadStatus =
                           downloadSongProvider.downloadStatus[videoId];
-                      final isPlayingThisSong =
-                          musicProvider.isPlaying &&
-                          musicProvider.currentTitle == song['title'];
 
                       return GestureDetector(
                         onTap: () {
@@ -145,6 +142,7 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(width: 10),
                                     if (downloadStatus == true)
                                       Icon(
                                         Icons.check_circle,
@@ -162,7 +160,7 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
                                       ),
                                     GestureDetector(
                                       onTap: () {
-                                        deletePlaylistDialog(
+                                        deleteSongDialog(
                                           context,
                                           widget.playlistName,
                                           song,
@@ -222,48 +220,5 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
           ),
       ],
     );
-  }
-
-  Widget _buildDownloadStatus(
-    BuildContext context,
-    bool? status,
-    String videoId,
-    String title,
-  ) {
-    if (status == true) {
-      return Row(
-        children: [
-          Icon(Icons.check_circle, size: 14, color: Colors.green),
-          SizedBox(width: 4),
-          Text(
-            "Terdownload",
-            style: TextStyle(fontSize: 12, color: Colors.green),
-          ),
-        ],
-      );
-    } else if (status == false) {
-      return Row(
-        children: [
-          SizedBox(
-            width: 14,
-            height: 14,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-          SizedBox(width: 4),
-          Text("Sedang mendownload...", style: TextStyle(fontSize: 12)),
-        ],
-      );
-    } else {
-      return Row(
-        children: [
-          Icon(Icons.cloud_download, size: 14, color: Colors.orange),
-          SizedBox(width: 4),
-          Text(
-            "Menunggu download",
-            style: TextStyle(fontSize: 12, color: Colors.orange),
-          ),
-        ],
-      );
-    }
   }
 }

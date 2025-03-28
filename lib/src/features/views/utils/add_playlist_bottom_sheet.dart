@@ -95,11 +95,7 @@ void addPlaylistBottomSheet(BuildContext context, Map<String, String> song) {
                     GestureDetector(
                       onTap: () {
                         ///CREATE playlist DIALOGGGGGGGG
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => CreatePlaylistDialog(song: song),
-                        );
+                        createPlaylistDialog(context, song, playlistProvider);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 15),

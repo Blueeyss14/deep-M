@@ -2,13 +2,14 @@ import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 
-void deletePlaylistDialog(
+void deleteSongDialog(
   BuildContext context,
   String playlistName,
+  Map<String, String> song,
   PlaylistProvider playlistProvider,
 ) {
   showDialog(
-    barrierColor: const Color(0x88000000),
+    barrierColor: const Color(0x5F000000),
     context: context,
     builder:
         (context) => AlertDialog(
@@ -41,7 +42,7 @@ void deletePlaylistDialog(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Are you sure delete this playlist?",
+                    "Are you sure delete this song?",
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -68,8 +69,10 @@ void deletePlaylistDialog(
                           backgroundColor: CustomColor.white1,
                         ),
                         onPressed: () {
-                          playlistProvider.deletePlaylist(playlistName);
-
+                          playlistProvider.removeSongFromPlaylist(
+                            playlistName,
+                            song,
+                          );
                           Navigator.pop(context);
                         },
                         child: Text(

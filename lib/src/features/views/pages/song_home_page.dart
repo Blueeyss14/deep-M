@@ -47,14 +47,6 @@ class SongHomePage extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // Container(
-              //   color: Colors.transparent,
-              //   height: MediaQuery.of(context).size.height / 7,
-              // ),
-
-              // Slider(value: value, onChanged: onChanged),
-              for (int i = 0; i < 100; i++) Text("${i + 1}"),
             ],
           ),
         ),

@@ -1,9 +1,10 @@
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
+import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CurrentSongText extends StatelessWidget {
-  const CurrentSongText({super.key});
+class CurrentSongDuration extends StatelessWidget {
+  const CurrentSongDuration({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +35,22 @@ class CurrentSongText extends StatelessWidget {
               builder: (context, durationSnapshot) {
                 final duration = durationSnapshot.data ?? Duration.zero;
 
-                if (audioPlayer.isBuffering) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(formatDuration(position)),
-                        Text(formatDuration(duration)),
-                      ],
-                    ),
-                  );
-                }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        formatDuration(position),
+                        style: TextStyle(color: CustomColor.white2),
+                      ),
+                      Text(
+                        formatDuration(duration),
+                        style: TextStyle(color: CustomColor.white2),
+                      ),
+                    ],
+                  ),
+                );
               },
             );
           },

@@ -50,9 +50,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             Expanded(
               child:
-                  searchProvider.isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : searchProvider.searchController.text.isNotEmpty
+                  searchProvider.searchController.text.isNotEmpty
                       ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: ListView.builder(
@@ -61,9 +59,7 @@ class _SearchPageState extends State<SearchPage> {
                           itemBuilder: (context, index) {
                             //Nambahin Sized box di bawah list lagu biar gak ketutupan
                             if (index == searchProvider.searchResult.length) {
-                              return SizedBox(
-                                height: MediaQuery.of(context).size.height / 4,
-                              );
+                              return SizedBox(height: 200);
                             }
 
                             final result = searchProvider.searchResult[index];

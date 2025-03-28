@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:deep_m/src/features/viewmodels/bottombar_viemodel.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
+import 'package:deep_m/src/features/viewmodels/search_song_provider.dart';
 import 'package:deep_m/src/features/views/components/bottom_bar.dart';
 import 'package:deep_m/src/shared/components/music_player_bar.dart';
 import 'package:deep_m/src/features/views/pages/playlist_page.dart';
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final bottomNavItem = Provider.of<BottombarViemodel>(context);
     final audioPlayer = Provider.of<MusicProvider>(context);
+    final searchSongProvider = Provider.of<SearchSongProvider>(context);
     super.build(context);
     return Stack(
       fit: StackFit.expand,
@@ -109,7 +111,7 @@ class _HomePageState extends State<HomePage>
             ),
           ),
 
-        if (audioPlayer.isBuffering)
+        if (audioPlayer.isBuffering || searchSongProvider.isLoading)
           Center(
             child: SizedBox(
               height: 30,

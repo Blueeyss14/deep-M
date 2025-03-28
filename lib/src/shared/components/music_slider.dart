@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
+import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,46 +25,41 @@ class MusicSlider extends StatelessWidget {
               builder: (context, durationSnapshot) {
                 final duration = durationSnapshot.data ?? Duration.zero;
 
-                if (audioPlayer.isBuffering) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return Column(
-                    children: [
-                      SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          thumbShape: const RoundSliderThumbShape(
-                            enabledThumbRadius: 5,
-                          ),
-                          overlayShape: const RoundSliderOverlayShape(
-                            overlayRadius: 14,
-                          ),
-                          thumbColor: Colors.red,
-                          activeTrackColor: Colors.red,
-                          inactiveTrackColor: Colors.grey[300],
+                return Column(
+                  children: [
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        trackHeight: 2,
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 4,
                         ),
-                        child: Slider(
-                          min: 0,
-                          max:
-                              duration.inSeconds.toDouble() > 0
-                                  ? duration.inSeconds.toDouble()
-                                  : 0.1,
-                          value: position.inSeconds.toDouble().clamp(
-                            0,
+                        overlayShape: const RoundSliderOverlayShape(
+                          overlayRadius: 10,
+                        ),
+                        thumbColor: CustomColor.white1,
+                        activeTrackColor: CustomColor.white1,
+                        inactiveTrackColor: CustomColor.white3,
+                      ),
+                      child: Slider(
+                        min: 0,
+                        max:
                             duration.inSeconds.toDouble() > 0
                                 ? duration.inSeconds.toDouble()
                                 : 0.1,
-                          ),
-                          onChanged: (value) async {
-                            final newPosition = Duration(
-                              seconds: value.toInt(),
-                            );
-                            await audioPlayer.audioPlayer.seek(newPosition);
-                          },
+                        value: position.inSeconds.toDouble().clamp(
+                          0,
+                          duration.inSeconds.toDouble() > 0
+                              ? duration.inSeconds.toDouble()
+                              : 0.1,
                         ),
+                        onChanged: (value) async {
+                          final newPosition = Duration(seconds: value.toInt());
+                          await audioPlayer.audioPlayer.seek(newPosition);
+                        },
                       ),
-                    ],
-                  );
-                }
+                    ),
+                  ],
+                );
               },
             );
           },

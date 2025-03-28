@@ -4,20 +4,6 @@ import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 
-// class CreatePlaylistDialog extends StatelessWidget {
-//   final Map<String, String> song;
-//   const CreatePlaylistDialog({super.key, required this.song});
-
-//   @override
-//   Widget build(BuildContext context) {
-
-//     final playlistProvider = Provider.of<PlaylistProvider>(context);
-
-//     // init
-//     playlistProvider.initDownloadSongProvider(context);
-
-//     return
-
 final TextEditingController playlistNameController = TextEditingController();
 
 void createPlaylistDialog(

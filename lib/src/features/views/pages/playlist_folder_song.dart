@@ -58,7 +58,7 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
                     ),
                   )
                   : ListView.builder(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.only(top: 15),
                     itemCount: songs.length,
                     itemBuilder: (context, songIndex) {
                       final song = songs[songIndex];

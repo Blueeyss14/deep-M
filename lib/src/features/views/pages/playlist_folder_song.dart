@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:deep_m/src/features/viewmodels/download_song_provider.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
 import 'package:deep_m/src/features/views/dialog/delete_song_dialog.dart';
+import 'package:deep_m/src/shared/components/is_downloaded.dart';
 import 'package:deep_m/src/shared/components/music_player_bar.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,6 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
   @override
   Widget build(BuildContext context) {
     final playlistProvider = Provider.of<PlaylistProvider>(context);
-    final downloadSongProvider = Provider.of<DownloadSongProvider>(context);
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
     final songs = playlistProvider.playlists[widget.playlistName] ?? [];
     return Stack(
@@ -63,8 +62,6 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
                     itemBuilder: (context, songIndex) {
                       final song = songs[songIndex];
                       final videoId = song['videoId'] ?? '';
-                      final downloadStatus =
-                          downloadSongProvider.downloadStatus[videoId];
 
                       return GestureDetector(
                         onTap: () {
@@ -143,21 +140,8 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
                                       ),
                                     ),
                                     const SizedBox(width: 10),
-                                    if (downloadStatus == true)
-                                      Icon(
-                                        Icons.check_circle,
-                                        size: 16,
-                                        color: Colors.green,
-                                      )
-                                    else
-                                      SizedBox(
-                                        width: 10,
-                                        height: 10,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: CustomColor.white1,
-                                        ),
-                                      ),
+                                    isDownloaded(context, videoId),
+
                                     GestureDetector(
                                       onTap: () {
                                         deleteSongDialog(

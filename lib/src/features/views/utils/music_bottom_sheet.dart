@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
+import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
+import 'package:deep_m/src/shared/components/is_downloaded.dart';
 import 'package:deep_m/src/shared/current_song_duration.dart';
 import 'package:deep_m/src/shared/components/music_slider.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
@@ -8,6 +10,18 @@ import 'package:provider/provider.dart';
 
 void musicBottomSheet(BuildContext context) {
   final musicProvider = Provider.of<MusicProvider>(context, listen: false);
+  final playlistProvider = Provider.of<PlaylistProvider>(
+    context,
+    listen: false,
+  );
+
+  String? playlistName = musicProvider.currentPlaylistName;
+  int? songIndex = musicProvider.currentSongIndex;
+
+  final songs = playlistProvider.playlists[playlistName] ?? [];
+  final song =
+      (songIndex >= 0 && songIndex < songs.length) ? songs[songIndex] : null;
+  final videoId = song != null ? song['videoId'] ?? '' : '';
 
   showModalBottomSheet(
     backgroundColor: CustomColor.blackSheet,
@@ -199,7 +213,25 @@ void musicBottomSheet(BuildContext context) {
                               },
                             ),
 
-                            SizedBox(width: 32),
+                            if (musicProvider.isPlayingOffline)
+                              Transform.scale(
+                                scale: 1.5,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: isDownloaded(context, videoId),
+                                ),
+                              )
+                            else
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {});
+                                },
+                                child: Icon(
+                                  Icons.add_circle_outline,
+                                  size: 26,
+                                  color: CustomColor.white2,
+                                ),
+                              ),
                           ],
                         ),
                         CurrentSongDuration(),
@@ -215,171 +247,7 @@ void musicBottomSheet(BuildContext context) {
                               ),
                             ),
                           ),
-
-                        // const SizedBox(height: 300),
-
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                        //   child: Column(
-                        //     children: [
-                        //       Padding(
-                        //         padding: const EdgeInsets.all(20),
-                        //         child: ClipRRect(
-                        //           borderRadius: BorderRadius.circular(10),
-                        //           child:
-                        //               musicProvider.currentThumbnail.isNotEmpty
-                        //                   ? Stack(
-                        //                     children: [
-                        //                       CachedNetworkImage(
-                        //                         imageUrl:
-                        //                             musicProvider.currentThumbnail,
-                        //                         height: 300,
-                        //                         fit: BoxFit.cover,
-                        //                       ),
-
-                        //                       Expanded(
-                        //                         child: Container(
-                        //                           color: Colors.amber,
-                        //                           height: 100,
-                        //                         ),
-                        //                       ),
-                        //                     ],
-                        //                   )
-                        //                   : Container(
-                        //                     width: 300,
-                        //                     height: 300,
-                        //                     color: Colors.grey[300],
-                        //                     child: Icon(Icons.music_note, size: 80),
-                        //                   ),
-                        //         ),
-                        //       ),
-                        //       if (musicProvider.isPlayingOffline)
-                        //         Positioned(
-                        //           right: 15,
-                        //           bottom: 15,
-                        // child:
-                        //       const SizedBox(height: 20),
-                        // Text(
-                        //   musicProvider.currentTitle,
-                        //   style: TextStyle(
-                        //     fontWeight: FontWeight.bold,
-                        //     fontSize: 18,
-                        //   ),
-                        //   textAlign: TextAlign.center,
-                        // ),
-                        // const SizedBox(height: 4),
-                        // Text(
-                        //   musicProvider.currentChannel.isNotEmpty
-                        //       ? musicProvider.currentChannel
-                        //       : '',
-                        //   style: TextStyle(
-                        //     fontSize: 14,
-                        //     color: Colors.grey[700],
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 20),
-
-                        //       // Music slider
-                        //       MusicSlider(),
-                        //       CurrentSongText(),
-
-                        //       // Player controls
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //   children: [
-                        //     _buildRepeatModeButton(
-                        //       context,
-                        //       musicProvider,
-                        //       setState,
-                        //     ),
-
-                        //     IconButton(
-                        //       icon: Icon(
-                        //         Icons.skip_previous,
-                        //         size: 28,
-                        //         color:
-                        //             musicProvider.isPlayingFromPlaylist
-                        //                 ? Colors.black
-                        //                 : Colors.grey[400],
-                        //       ),
-                        //       onPressed:
-                        //           musicProvider.isPlayingFromPlaylist
-                        //               ? () {
-                        //                 musicProvider.playPreviousSong(context);
-                        //               }
-                        //               : null,
-                        //     ),
-
-                        //     Container(
-                        //       width: 60,
-                        //       height: 60,
-                        //       decoration: BoxDecoration(
-                        //         color: Colors.amber,
-                        //         shape: BoxShape.circle,
-                        //       ),
-                        //       child: IconButton(
-                        //         icon: Icon(
-                        //           musicProvider.isPlaying
-                        //               ? Icons.pause
-                        //               : Icons.play_arrow,
-                        //           size: 32,
-                        //         ),
-                        //         onPressed: () {
-                        //           if (musicProvider.isPlaying) {
-                        //             musicProvider.pauseAudio();
-                        //           } else {
-                        //             musicProvider.audioPlayer.play();
-                        //           }
-                        //           setState(() {});
-                        //         },
-                        //       ),
-                        //     ),
-
-                        //     IconButton(
-                        //       icon: Icon(
-                        //         Icons.skip_next,
-                        //         size: 28,
-                        //         color:
-                        //             musicProvider.isPlayingFromPlaylist
-                        //                 ? Colors.black
-                        //                 : Colors.grey[400],
-                        //       ),
-                        //       onPressed:
-                        //           musicProvider.isPlayingFromPlaylist
-                        //               ? () {
-                        //                 musicProvider.playNextSong(context);
-                        //               }
-                        //               : null,
-                        //     ),
-
-                        //     SizedBox(width: 32),
-                        //   ],
-                        // ),
-
-                        //       const SizedBox(height: 20),
-
-                        //       if (musicProvider.currentDescription.isNotEmpty)
-                        //         Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             Text(
-                        //               "Deskripsi:",
-                        //               style: TextStyle(
-                        //                 fontWeight: FontWeight.bold,
-                        //                 fontSize: 15,
-                        //               ),
-                        //             ),
-                        //             const SizedBox(height: 4),
-                        //             Text(
-                        //               musicProvider.currentDescription,
-                        //               style: TextStyle(fontSize: 13),
-                        //             ),
-                        //             const SizedBox(height: 20),
-                        //           ],
-                        //         ),
-                        //     ],
-                        //   ),
-                        // ),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -407,21 +275,18 @@ Widget _buildRepeatModeButton(
   switch (musicProvider.repeatMode) {
     case RepeatMode.none:
       iconData = Icons.repeat;
-      iconColor = Colors.grey;
-      tooltip = 'Sekali saja';
+      iconColor = CustomColor.white3;
+      tooltip = 'Play once';
       break;
     case RepeatMode.playlist:
       iconData = Icons.repeat;
-      iconColor = isPlaylist ? Colors.black : Colors.grey[400]!;
-      tooltip =
-          isPlaylist
-              ? 'Putar semua lagu di playlist'
-              : 'Mode tidak tersedia (tidak dalam playlist)';
+      iconColor = isPlaylist ? CustomColor.white1 : CustomColor.white3;
+      tooltip = isPlaylist ? 'Play all song' : '';
       break;
     case RepeatMode.single:
       iconData = Icons.repeat_one;
-      iconColor = Colors.black;
-      tooltip = 'Ulang lagu ini';
+      iconColor = CustomColor.white1;
+      tooltip = 'Repeat';
       break;
   }
 

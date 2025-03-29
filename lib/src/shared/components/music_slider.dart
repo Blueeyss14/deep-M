@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';

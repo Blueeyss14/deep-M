@@ -69,10 +69,10 @@ class _SearchPageState extends State<SearchPage> {
                                 musicProvider.playAudio(
                                   context,
                                   result['videoId'] ?? '',
-                                  result['title'] ?? 'Tidak Ada',
+                                  result['title'] ?? '',
                                   result['thumbnail'] ?? '',
-                                  result['channel'] ?? 'Tidak Ada',
-                                  result['description'] ?? 'Tidak Ada',
+                                  result['channel'] ?? '',
+                                  result['description'] ?? '',
                                 );
                               },
                               child: Container(
@@ -139,9 +139,12 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       )
                       : Center(
-                        child: Text(
-                          'Search Song',
-                          style: TextStyle(color: CustomColor.white2),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 60),
+                          child: Text(
+                            'Search Song',
+                            style: TextStyle(color: CustomColor.white2),
+                          ),
                         ),
                       ),
             ),

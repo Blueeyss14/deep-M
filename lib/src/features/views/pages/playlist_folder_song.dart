@@ -41,19 +41,9 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
           body:
               songs.isEmpty
                   ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.music_note, size: 80, color: Colors.grey),
-                        SizedBox(height: 16),
-                        Text(
-                          "Playlist ini kosong",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      "No song in this playlist",
+                      style: TextStyle(color: CustomColor.white2),
                     ),
                   )
                   : ListView.builder(

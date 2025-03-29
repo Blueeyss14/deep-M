@@ -81,13 +81,13 @@ class _PlaylistPageState extends State<PlaylistPage> {
                 children: [
                   Text(
                     "GET OUT 🗣🗣",
-                    style: TextStyle(fontSize: 16, color: CustomColor.white2),
+                    style: TextStyle(color: CustomColor.white2),
                   ),
                   const SizedBox(height: 5),
 
                   Text(
                     "No Playlist Created",
-                    style: TextStyle(fontSize: 16, color: CustomColor.white2),
+                    style: TextStyle(color: CustomColor.white2),
                   ),
                   const SizedBox(height: 60),
                 ],

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
-import 'package:deep_m/src/features/views/dialog/create_playlist_dialog.dart';
+import 'package:deep_m/src/features/views/utils/add_playlist_bottom_sheet.dart';
 import 'package:deep_m/src/shared/components/is_downloaded.dart';
 import 'package:deep_m/src/shared/current_song_duration.dart';
 import 'package:deep_m/src/shared/components/music_slider.dart';
@@ -22,6 +22,7 @@ void musicBottomSheet(BuildContext context) {
   final songs = playlistProvider.playlists[playlistName] ?? [];
   final song =
       (songIndex >= 0 && songIndex < songs.length) ? songs[songIndex] : null;
+
   final videoId = song != null ? song['videoId'] ?? '' : '';
 
   showModalBottomSheet(
@@ -34,6 +35,17 @@ void musicBottomSheet(BuildContext context) {
     ),
     context: context,
     builder: (context) {
+      void addPlaylist() {
+        Navigator.pop(context);
+        addPlaylistBottomSheet(context, {
+          'videoId': musicProvider.currentVideoId,
+          'title': musicProvider.currentTitle,
+          'thumbnail': musicProvider.currentThumbnail,
+          'channel': musicProvider.currentChannel,
+          'description': musicProvider.currentDescription,
+        });
+      }
+
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -42,7 +54,7 @@ void musicBottomSheet(BuildContext context) {
             ///Dialog dragger yang putih putih itu apalah namanya
             Center(
               child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(vertical: 12),
                 width: 30,
                 height: 4,
                 decoration: BoxDecoration(
@@ -215,28 +227,19 @@ void musicBottomSheet(BuildContext context) {
                             ),
 
                             if (musicProvider.isPlayingOffline)
-                              Transform.scale(
-                                scale: 1.5,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: isDownloaded(context, videoId),
+                              GestureDetector(
+                                onTap: addPlaylist,
+                                child: Transform.scale(
+                                  scale: 1.5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: isDownloaded(context, videoId),
+                                  ),
                                 ),
                               )
                             else
                               GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    createPlaylistDialog(context, {
-                                      'videoId': musicProvider.currentVideoId,
-                                      'title': musicProvider.currentTitle,
-                                      'thumbnail':
-                                          musicProvider.currentThumbnail,
-                                      'channel': musicProvider.currentChannel,
-                                      'description':
-                                          musicProvider.currentDescription,
-                                    }, playlistProvider);
-                                  });
-                                },
+                                onTap: addPlaylist,
                                 child: Icon(
                                   Icons.add_circle_outline,
                                   size: 26,

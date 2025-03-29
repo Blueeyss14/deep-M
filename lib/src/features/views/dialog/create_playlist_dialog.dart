@@ -81,6 +81,7 @@ void createPlaylistDialog(
                                 );
                                 Navigator.pop(context); // Close dialog
                                 Navigator.pop(context); // Close sheet
+                                playlistNameController.clear();
                               }
                             },
                           ),
@@ -114,6 +115,7 @@ void createPlaylistDialog(
                                 );
                                 Navigator.pop(context); // Close dialog
                                 Navigator.pop(context); // Close bottom sheet
+                                playlistNameController.clear();
                               }
                             },
                             child: Text(

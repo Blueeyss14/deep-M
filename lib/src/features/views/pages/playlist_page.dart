@@ -29,6 +29,8 @@ class _PlaylistPageState extends State<PlaylistPage> {
   Future<void> _initializeProviders() async {
     if (_isInitialized) return;
 
+    if (!mounted) return;
+
     final playlistProvider = Provider.of<PlaylistProvider>(
       context,
       listen: false,
@@ -40,6 +42,8 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
     playlistProvider.initDownloadSongProvider(context);
     await downloadSongProvider.loadDownloadStatus();
+
+    if (!mounted) return;
     await playlistProvider.downloadAllPendingSongs(context);
 
     _isInitialized = true;

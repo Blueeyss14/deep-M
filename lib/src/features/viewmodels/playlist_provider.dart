@@ -107,6 +107,7 @@ class PlaylistProvider extends ChangeNotifier {
     String playlistName,
     Map<String, String> song,
   ) async {
+    // Remove from playlist
     playlists[playlistName]!.removeWhere(
       (item) => item['videoId'] == song['videoId'],
     );
@@ -114,8 +115,22 @@ class PlaylistProvider extends ChangeNotifier {
     if (playlists[playlistName]!.isEmpty) {
       playlists.remove(playlistName);
     }
-    notifyListeners();
 
+    // Delete physical file
+    if (downloadSongProvider != null) {
+      final videoId = song['videoId'];
+      if (videoId != null) {
+        final file = await downloadSongProvider!.getAudioFile(videoId);
+        if (await file.exists()) {
+          await file.delete();
+        }
+        // Reset download status
+        downloadSongProvider!.downloadStatus[videoId] = null;
+        await downloadSongProvider!.saveDownloadStatus();
+      }
+    }
+
+    notifyListeners();
     await savePlaylist();
   }
 
@@ -229,9 +244,24 @@ class PlaylistProvider extends ChangeNotifier {
   }
 
   Future<void> deletePlaylist(String playlistName) async {
+    if (downloadSongProvider != null && playlists.containsKey(playlistName)) {
+      final songs = playlists[playlistName]!;
+      for (var song in songs) {
+        final videoId = song['videoId'];
+        if (videoId != null) {
+          final file = await downloadSongProvider!.getAudioFile(videoId);
+          if (await file.exists()) {
+            await file.delete();
+          }
+          // Reset download status
+          downloadSongProvider!.downloadStatus[videoId] = null;
+        }
+      }
+      await downloadSongProvider!.saveDownloadStatus();
+    }
+
     playlists.remove(playlistName);
     notifyListeners();
-
     await savePlaylist();
   }
 }

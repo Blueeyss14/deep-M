@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/features/viewmodels/playlist_provider.dart';
+import 'package:deep_m/src/features/views/dialog/create_playlist_dialog.dart';
 import 'package:deep_m/src/shared/components/is_downloaded.dart';
 import 'package:deep_m/src/shared/current_song_duration.dart';
 import 'package:deep_m/src/shared/components/music_slider.dart';
@@ -224,7 +225,17 @@ void musicBottomSheet(BuildContext context) {
                             else
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {});
+                                  setState(() {
+                                    createPlaylistDialog(context, {
+                                      'videoId': musicProvider.currentVideoId,
+                                      'title': musicProvider.currentTitle,
+                                      'thumbnail':
+                                          musicProvider.currentThumbnail,
+                                      'channel': musicProvider.currentChannel,
+                                      'description':
+                                          musicProvider.currentDescription,
+                                    }, playlistProvider);
+                                  });
                                 },
                                 child: Icon(
                                   Icons.add_circle_outline,

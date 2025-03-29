@@ -68,12 +68,14 @@ void deleteSongDialog(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: CustomColor.white1,
                         ),
-                        onPressed: () {
-                          playlistProvider.removeSongFromPlaylist(
+                        onPressed: () async {
+                          await playlistProvider.removeSongFromPlaylist(
                             playlistName,
                             song,
                           );
-                          Navigator.pop(context);
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
                         },
                         child: Text(
                           "Delete",

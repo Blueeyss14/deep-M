@@ -2,10 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
 import 'package:deep_m/src/shared/widgets/blur_background.dart';
 import 'package:deep_m/src/shared/components/current_song_duration.dart';
-import 'package:deep_m/src/shared/components/is_downloaded.dart';
 import 'package:deep_m/src/shared/components/music_slider.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
-import 'package:deep_m/src/shared/widgets/build_repeat_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +14,8 @@ class SongHomePage extends StatefulWidget {
   State<SongHomePage> createState() => _SongHomePageState();
 }
 
-class _SongHomePageState extends State<SongHomePage> {
+class _SongHomePageState extends State<SongHomePage>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
@@ -24,26 +23,29 @@ class _SongHomePageState extends State<SongHomePage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
-
+              SizedBox(height: MediaQuery.of(context).size.height / 4 - 50),
               Row(
                 children: [
                   ///THUMBNAIL------
                   BlurBackground(
-                    padding: const EdgeInsets.all(10),
+                    borderRadius: BorderRadius.circular(8),
+                    padding: const EdgeInsets.all(12),
                     height: 70,
                     width: 70,
                     child:
                         musicProvider.currentThumbnail.isNotEmpty
-                            ? CachedNetworkImage(
-                              imageUrl: musicProvider.currentThumbnail,
-                              fit: BoxFit.cover,
+                            ? ClipRRect(
+                              borderRadius: BorderRadius.circular(3),
+                              child: CachedNetworkImage(
+                                imageUrl: musicProvider.currentThumbnail,
+                                fit: BoxFit.cover,
+                              ),
                             )
                             : const SizedBox(),
                   ),
@@ -51,6 +53,7 @@ class _SongHomePageState extends State<SongHomePage> {
                   const SizedBox(width: 15),
                   Expanded(
                     child: BlurBackground(
+                      borderRadius: BorderRadius.circular(8),
                       padding: const EdgeInsets.all(15),
                       height: 70,
                       child: Column(
@@ -83,13 +86,103 @@ class _SongHomePageState extends State<SongHomePage> {
                 ],
               ),
 
+              // const SizedBox(height: 80),
               BlurBackground(
-                margin: const EdgeInsets.symmetric(vertical: 10),
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 15),
                 width: double.infinity,
                 height: 200,
+                child:
+                    (musicProvider.currentTitle.isNotEmpty &&
+                                musicProvider.isPlayingOffline ||
+                            musicProvider.currentChannel.isNotEmpty &&
+                                musicProvider.isPlayingOffline)
+                        ? Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: Colors.black.withAlpha(20),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.offline_bolt,
+                                              color: CustomColor.white1,
+                                              size: 14,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              "Offline",
+                                              style: TextStyle(
+                                                color: CustomColor.white2,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.check_circle,
+                                        size: 16,
+                                        color: Colors.green,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                "You're Playing Offline Song",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                  color: CustomColor.white2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                        : !musicProvider.isPlayingOffline &&
+                            musicProvider.currentTitle.isNotEmpty
+                        ? Center(
+                          child: Text(
+                            "You're Playing Online Song",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColor.white2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        )
+                        : Text(
+                          "No Song Played",
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: CustomColor.white2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
               ),
 
               BlurBackground(
+                // margin: const EdgeInsets.only(bottom: 200),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 width: double.infinity,
                 child: Column(
@@ -97,7 +190,6 @@ class _SongHomePageState extends State<SongHomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // buildRepeatModeButton(context, musicProvider, setState),
                         IconButton(
                           icon: Icon(
                             Icons.skip_previous,
@@ -166,27 +258,6 @@ class _SongHomePageState extends State<SongHomePage> {
                             }
                           },
                         ),
-
-                        // if (musicProvider.isPlayingOffline)
-                        //   GestureDetector(
-                        //     onTap: addPlaylist,
-                        //     child: Transform.scale(
-                        //       scale: 1.5,
-                        //       child: Padding(
-                        //         padding: const EdgeInsets.all(10),
-                        //         child: isDownloaded(context, videoId),
-                        //       ),
-                        //     ),
-                        //   )
-                        // else
-                        //   GestureDetector(
-                        //     onTap: addPlaylist,
-                        //     child: Icon(
-                        //       Icons.add_circle_outline,
-                        //       size: 26,
-                        //       color: CustomColor.white2,
-                        //     ),
-                        //   ),
                       ],
                     ),
                     const SizedBox(height: 5),
@@ -195,6 +266,7 @@ class _SongHomePageState extends State<SongHomePage> {
                   ],
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height / 4),
             ],
           ),
         ),

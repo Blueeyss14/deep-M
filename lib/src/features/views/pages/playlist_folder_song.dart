@@ -63,6 +63,7 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
                               songIndex,
                             );
                           });
+                          setState(() {});
                         },
                         child: ClipRect(
                           clipBehavior: Clip.antiAlias,
@@ -71,69 +72,97 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
 
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 8),
-                              child: BlurBackground(
-                                padding: const EdgeInsets.all(10),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 500),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors:
+                                        (musicProvider.currentSongIndex ==
+                                                    songIndex &&
+                                                musicProvider
+                                                        .currentPlaylistName ==
+                                                    widget.playlistName)
+                                            ? [
+                                              CustomColor.songPlaying1,
+                                              CustomColor.songPlaying2,
+                                              Colors.transparent,
+                                            ]
+                                            : [
+                                              Colors.transparent,
+                                              Colors.transparent,
+                                            ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 15,
                                 ),
-                                child: Row(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(3),
-                                      child: CachedNetworkImage(
-                                        imageUrl: song['thumbnail'] ?? '',
-                                        width: 40,
-                                        height: 40,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            song['title'] ?? '',
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                              color: CustomColor.white1,
-                                            ),
-                                          ),
-                                          Text(
-                                            song['channel'] ?? '',
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: CustomColor.white2,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    isDownloaded(context, videoId),
+                                child: BlurBackground(
+                                  padding: const EdgeInsets.all(10),
 
-                                    GestureDetector(
-                                      onTap: () {
-                                        deleteSongDialog(
-                                          context,
-                                          widget.playlistName,
-                                          song,
-                                          playlistProvider,
-                                        );
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Icon(
-                                          Icons.delete,
-                                          color: CustomColor.white1,
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(3),
+                                        child: CachedNetworkImage(
+                                          imageUrl: song['thumbnail'] ?? '',
+                                          width: 40,
+                                          height: 40,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              song['title'] ?? '',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                color: CustomColor.white1,
+                                              ),
+                                            ),
+                                            Text(
+                                              song['channel'] ?? '',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: CustomColor.white2,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      isDownloaded(context, videoId),
+
+                                      GestureDetector(
+                                        onTap: () {
+                                          deleteSongDialog(
+                                            context,
+                                            widget.playlistName,
+                                            song,
+                                            playlistProvider,
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 5,
+                                          ),
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: CustomColor.white1,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

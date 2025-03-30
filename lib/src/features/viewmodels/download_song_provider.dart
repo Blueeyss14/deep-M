@@ -149,7 +149,6 @@ class DownloadSongProvider extends ChangeNotifier {
       await fileStream.flush();
       await fileStream.close();
 
-      // Verifikasi file
       final fileSize = await file.length();
       if (fileSize < 10 * 1024) {
         // Kurang dari 10KB
@@ -161,7 +160,6 @@ class DownloadSongProvider extends ChangeNotifier {
       await saveDownloadStatus();
       notifyListeners();
 
-      // Tampilkan notifikasi offline
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -178,7 +176,6 @@ class DownloadSongProvider extends ChangeNotifier {
       await saveDownloadStatus();
       notifyListeners();
 
-      // Show error message if context is still valid
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -7,6 +7,8 @@ class BlurBackground extends StatelessWidget {
   final double? width;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
+  final AlignmentGeometry? alignment;
+  final BorderRadiusGeometry? borderRadius;
   const BlurBackground({
     super.key,
     this.child,
@@ -14,18 +16,21 @@ class BlurBackground extends StatelessWidget {
     this.width,
     this.padding,
     this.margin,
+    this.alignment,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: alignment,
       margin: margin,
       padding: padding,
       height: height,
       width: width,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: borderRadius ?? BorderRadius.circular(10),
         border: Border.all(
           width: 0.5,
           color: CustomColor.white2.withAlpha(100),

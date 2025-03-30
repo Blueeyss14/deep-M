@@ -14,11 +14,10 @@ class SongHomePage extends StatefulWidget {
   State<SongHomePage> createState() => _SongHomePageState();
 }
 
-class _SongHomePageState extends State<SongHomePage>
-    with SingleTickerProviderStateMixin {
+class _SongHomePageState extends State<SongHomePage> {
   @override
   Widget build(BuildContext context) {
-    final musicProvider = Provider.of<MusicProvider>(context, listen: false);
+    final musicProvider = Provider.of<MusicProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -29,7 +28,7 @@ class _SongHomePageState extends State<SongHomePage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height / 4 - 50),
+              Container(height: MediaQuery.of(context).size.height / 4 - 50),
               Row(
                 children: [
                   ///THUMBNAIL------
@@ -49,7 +48,6 @@ class _SongHomePageState extends State<SongHomePage>
                             )
                             : const SizedBox(),
                   ),
-
                   const SizedBox(width: 15),
                   Expanded(
                     child: BlurBackground(
@@ -264,7 +262,7 @@ class _SongHomePageState extends State<SongHomePage>
                   ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 4),
+              Container(height: MediaQuery.of(context).size.height / 4),
             ],
           ),
         ),

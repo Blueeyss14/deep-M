@@ -24,7 +24,11 @@ class _HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true;
 
-  List<Widget> pages = [SongHomePage(), SearchPage(), PlaylistPage()];
+  final List<Widget> pages = const [
+    SongHomePage(),
+    SearchPage(),
+    PlaylistPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {

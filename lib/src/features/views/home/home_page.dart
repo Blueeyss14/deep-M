@@ -40,52 +40,50 @@ class _HomePageState extends State<HomePage>
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
 
-          body: SafeArea(
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    Expanded(
-                      child:
-                          NotificationListener<OverscrollIndicatorNotification>(
-                            onNotification: (
-                              OverscrollIndicatorNotification overscroll,
-                            ) {
-                              overscroll.disallowIndicator();
-                              return true;
+          body: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child:
+                        NotificationListener<OverscrollIndicatorNotification>(
+                          onNotification: (
+                            OverscrollIndicatorNotification overscroll,
+                          ) {
+                            overscroll.disallowIndicator();
+                            return true;
+                          },
+                          child: PageView(
+                            padEnds: false,
+                            controller: bottomNavItem.pageController,
+                            children: pages,
+                            onPageChanged: (index) {
+                              setState(() {
+                                bottomNavItem.currentIndex = index;
+                              });
                             },
-                            child: PageView(
-                              padEnds: false,
-                              controller: bottomNavItem.pageController,
-                              children: pages,
-                              onPageChanged: (index) {
-                                setState(() {
-                                  bottomNavItem.currentIndex = index;
-                                });
-                              },
-                            ),
                           ),
-                    ),
-                  ],
-                ),
+                        ),
+                  ),
+                ],
+              ),
 
-                /// BOTTOM BAR && MUSIC PLAYER BAR
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ///MUSIC PLAYER BAR
-                    if (audioPlayer.currentChannel.isNotEmpty)
-                      if (ModalRoute.of(context)?.isCurrent == true)
-                        MusicPlayerBar(),
+              /// BOTTOM BAR && MUSIC PLAYER BAR
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ///MUSIC PLAYER BAR
+                  if (audioPlayer.currentChannel.isNotEmpty)
+                    if (ModalRoute.of(context)?.isCurrent == true)
+                      MusicPlayerBar(),
 
-                    const SizedBox(height: 5),
+                  const SizedBox(height: 5),
 
-                    ///BOTTOM BAR
-                    BottomBar(),
-                  ],
-                ),
-              ],
-            ),
+                  ///BOTTOM BAR
+                  BottomBar(),
+                ],
+              ),
+            ],
           ),
         ),
 

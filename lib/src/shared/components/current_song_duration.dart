@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CurrentSongDuration extends StatelessWidget {
+  static Duration position = Duration.zero;
+  static Duration duration = Duration.zero;
+
   const CurrentSongDuration({super.key});
 
   @override
@@ -28,12 +31,12 @@ class CurrentSongDuration extends StatelessWidget {
         StreamBuilder(
           stream: audioPlayer.audioPlayer.positionStream,
           builder: (context, positionSnapshot) {
-            final position = positionSnapshot.data ?? Duration.zero;
+            position = positionSnapshot.data ?? Duration.zero;
 
             return StreamBuilder(
               stream: audioPlayer.audioPlayer.durationStream,
               builder: (context, durationSnapshot) {
-                final duration = durationSnapshot.data ?? Duration.zero;
+                duration = durationSnapshot.data ?? Duration.zero;
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

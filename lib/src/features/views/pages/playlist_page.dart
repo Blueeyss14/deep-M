@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:deep_m/src/features/viewmodels/download_song_provider.dart';
 import 'package:deep_m/src/features/views/dialog/delete_playlist_dialog.dart';
 import 'package:deep_m/src/features/views/pages/playlist_folder_song.dart';
+import 'package:deep_m/src/shared/widgets/blur_background.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -160,26 +161,10 @@ class _PlaylistPageState extends State<PlaylistPage> {
         clipBehavior: Clip.antiAlias,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 8),
-          child: Container(
+          child: BlurBackground(
             padding: const EdgeInsets.all(15),
             margin: EdgeInsets.all(10),
             height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 0.5,
-                color: CustomColor.white2.withAlpha(100),
-              ),
-              gradient: LinearGradient(
-                colors: [
-                  CustomColor.musicBar1.withAlpha(50),
-                  CustomColor.musicBar2.withAlpha(70),
-                  CustomColor.musicBar3.withAlpha(80),
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

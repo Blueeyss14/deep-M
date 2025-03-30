@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deep_m/src/features/viewmodels/music_provider.dart';
+import 'package:deep_m/src/shared/widgets/blur_background.dart';
 import 'package:deep_m/src/shared/components/current_song_duration.dart';
 import 'package:deep_m/src/shared/components/is_downloaded.dart';
 import 'package:deep_m/src/shared/components/music_slider.dart';
@@ -27,67 +28,31 @@ class _SongHomePageState extends State<SongHomePage> {
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 50),
+
               Row(
                 children: [
                   ///THUMBNAIL------
-                  Container(
+                  BlurBackground(
+                    padding: const EdgeInsets.all(10),
                     height: 70,
                     width: 70,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        width: 0.5,
-                        color: CustomColor.white2.withAlpha(100),
-                      ),
-                      gradient: LinearGradient(
-                        colors: [
-                          CustomColor.musicBar1.withAlpha(50),
-                          CustomColor.musicBar2.withAlpha(70),
-                          CustomColor.musicBar3.withAlpha(80),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                    ),
                     child:
-                        ///IMAGE
                         musicProvider.currentThumbnail.isNotEmpty
-                            ? Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(3),
-                                child: CachedNetworkImage(
-                                  imageUrl: musicProvider.currentThumbnail,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                            ? CachedNetworkImage(
+                              imageUrl: musicProvider.currentThumbnail,
+                              fit: BoxFit.cover,
                             )
                             : const SizedBox(),
                   ),
+
                   const SizedBox(width: 15),
                   Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
+                    child: BlurBackground(
+                      padding: const EdgeInsets.all(15),
                       height: 70,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          width: 0.5,
-                          color: CustomColor.white2.withAlpha(100),
-                        ),
-                        gradient: LinearGradient(
-                          colors: [
-                            CustomColor.musicBar1.withAlpha(50),
-                            CustomColor.musicBar2.withAlpha(70),
-                            CustomColor.musicBar3.withAlpha(80),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,50 +82,16 @@ class _SongHomePageState extends State<SongHomePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
 
-              /// ini-------------------------------------------COVER--------------------------------------
-              Container(
+              BlurBackground(
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 width: double.infinity,
                 height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    width: 0.5,
-                    color: CustomColor.white2.withAlpha(100),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [
-                      CustomColor.musicBar1.withAlpha(50),
-                      CustomColor.musicBar2.withAlpha(70),
-                      CustomColor.musicBar3.withAlpha(80),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
               ),
-              const SizedBox(height: 10),
 
-              Container(
+              BlurBackground(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    width: 0.5,
-                    color: CustomColor.white2.withAlpha(100),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [
-                      CustomColor.musicBar1.withAlpha(50),
-                      CustomColor.musicBar2.withAlpha(70),
-                      CustomColor.musicBar3.withAlpha(80),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
                 child: Column(
                   children: [
                     Row(
@@ -192,23 +123,30 @@ class _SongHomePageState extends State<SongHomePage> {
                             color: CustomColor.white1,
                             shape: BoxShape.circle,
                           ),
-                          child: IconButton(
-                            icon: Icon(
-                              musicProvider.isPlaying
-                                  ? Icons.pause
-                                  : Icons.play_arrow,
-                              color: CustomColor.blackSheet,
-                              size: 32,
-                            ),
-                            onPressed: () {
-                              if (musicProvider.isPlaying) {
-                                musicProvider.pauseAudio();
-                              } else {
-                                musicProvider.audioPlayer.play();
-                              }
-                              setState(() {});
-                            },
-                          ),
+                          child:
+                              CurrentSongDuration.duration.inSeconds != 0
+                                  ? IconButton(
+                                    icon: Icon(
+                                      musicProvider.isPlaying
+                                          ? Icons.pause
+                                          : Icons.play_arrow,
+                                      color: CustomColor.blackSheet,
+                                      size: 32,
+                                    ),
+                                    onPressed: () {
+                                      if (musicProvider.isPlaying) {
+                                        musicProvider.pauseAudio();
+                                      } else {
+                                        musicProvider.audioPlayer.play();
+                                      }
+                                      setState(() {});
+                                    },
+                                  )
+                                  : Icon(
+                                    Icons.play_arrow,
+                                    color: CustomColor.blackSheet,
+                                    size: 32,
+                                  ),
                         ),
 
                         IconButton(

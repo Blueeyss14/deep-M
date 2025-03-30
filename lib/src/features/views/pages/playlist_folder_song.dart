@@ -7,6 +7,7 @@ import 'package:deep_m/src/features/views/dialog/delete_song_dialog.dart';
 import 'package:deep_m/src/shared/components/is_downloaded.dart';
 import 'package:deep_m/src/shared/components/music_player_bar.dart';
 import 'package:deep_m/src/shared/style/custom_color.dart';
+import 'package:deep_m/src/shared/widgets/blur_background.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -70,28 +71,11 @@ class _PlaylistFolderSongState extends State<PlaylistFolderSong> {
 
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 8),
-                              child: Container(
+                              child: BlurBackground(
                                 padding: const EdgeInsets.all(10),
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 15,
                                 ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: CustomColor.white2.withAlpha(100),
-                                  ),
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      CustomColor.musicBar1.withAlpha(50),
-                                      CustomColor.musicBar2.withAlpha(70),
-                                      CustomColor.musicBar3.withAlpha(80),
-                                    ],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
-                                ),
-
                                 child: Row(
                                   children: [
                                     ClipRRect(

@@ -86,7 +86,6 @@ class _SongHomePageState extends State<SongHomePage>
                 ],
               ),
 
-              // const SizedBox(height: 80),
               BlurBackground(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(vertical: 15),
@@ -182,7 +181,6 @@ class _SongHomePageState extends State<SongHomePage>
               ),
 
               BlurBackground(
-                // margin: const EdgeInsets.only(bottom: 200),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 width: double.infinity,
                 child: Column(

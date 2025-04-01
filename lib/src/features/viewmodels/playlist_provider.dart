@@ -61,7 +61,7 @@ class PlaylistProvider extends ChangeNotifier {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Gagal mendownload lagu, coba lagi nanti"),
+              content: Text("Failed add to playlist"),
               duration: Duration(seconds: 3),
             ),
           );
@@ -71,14 +71,14 @@ class PlaylistProvider extends ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Ditambahkan ke playlist: $playlistName"),
+          content: Text("Added to playlist: $playlistName"),
           duration: Duration(seconds: 2),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Lagu sudah ada di playlist"),
+          content: Text("This song is already in playlist"),
           duration: Duration(seconds: 2),
         ),
       );
@@ -95,7 +95,7 @@ class PlaylistProvider extends ChangeNotifier {
       final file = await downloadSongProvider!.getJsonFile(playlistsFileName);
       final playlistJson = json.encode(playlists);
       await file.writeAsString(playlistJson);
-      print("Playlist tersimpan");
+      print("Playlist saved");
     } catch (e) {
       if (kDebugMode) {
         print('Error zzz: $e');

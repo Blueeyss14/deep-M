@@ -256,10 +256,28 @@ class MusicProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final file = await getAudioFile(videoId);
-      final isDownloaded = await isAudioDownloaded(videoId);
+      // Initialize playlist provider if not initialized
+      if (_playlistProvider == null) {
+        initPlaylistProvider(context);
+      }
 
-      if (isDownloaded) {
+      // Check if song exists in any playlist
+      bool songExistsInPlaylist = false;
+      if (_playlistProvider != null) {
+        for (final playlistSongs in _playlistProvider!.playlists.values) {
+          if (playlistSongs.any((song) => song['videoId'] == videoId)) {
+            songExistsInPlaylist = true;
+            break;
+          }
+        }
+      }
+
+      final file = await getAudioFile(videoId);
+      final fileExists = await file.exists();
+      final isFileValid = fileExists && await file.length() > 10 * 1024;
+
+      // Only consider offline if file exists, is valid, and song is in a playlist
+      if (isFileValid && songExistsInPlaylist) {
         try {
           await audioPlayer.setFilePath(file.path);
           isPlayingOffline = true;
